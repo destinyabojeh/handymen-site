@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Wrench, Truck, Hammer, CheckCircle, ArrowRight, Star, MessageCircle, MapPin, Mail } from 'lucide-react';
+import { X, Wrench, Truck, Hammer, CheckCircle, ArrowRight, Star, MessageCircle, MapPin, Mail, Loader2 } from 'lucide-react';
 import { useBooking } from '../context/BookingContext';
 import { GoogleGenAI, Modality } from "@google/genai";
 
@@ -37,6 +37,7 @@ const BookingModal: React.FC = () => {
   const { isBookingOpen, closeBooking, initialService, initialDetails } = useBooking();
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', location: '', details: '', service: '', isWhatsApp: true });
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   const getProfessionalSentence = (serviceId: string) => {
@@ -120,8 +121,14 @@ const BookingModal: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setIsSubmitting(false);
     setIsSuccess(true);
     playSuccessVoice();
   };
@@ -152,9 +159,19 @@ const BookingModal: React.FC = () => {
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#adf802_1px,transparent_1px)] [background-size:20px_20px]"></div>
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-lime/10 rounded-full blur-[60px]"></div>
           
-          <div className="relative z-10">
-            <h3 className="font-heading text-2xl font-bold mb-2">Handymen<span className="text-brand-lime">.Ng</span></h3>
-            <p className="text-brand-lime/80 text-[10px] font-bold tracking-[0.3em] uppercase">Premium Standards</p>
+          <div className="relative z-10 flex items-center gap-3">
+            <img 
+              src="logo.jpg" 
+              alt="Logo" 
+              className="h-10 w-auto object-contain" 
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+            <div>
+              <h3 className="font-heading text-2xl font-bold mb-0">Handymen<span className="text-brand-lime">.Ng</span></h3>
+              <p className="text-brand-lime/80 text-[10px] font-bold tracking-[0.3em] uppercase leading-none">Premium Standards</p>
+            </div>
           </div>
 
           <div className="relative z-10 space-y-8">
@@ -210,6 +227,14 @@ const BookingModal: React.FC = () => {
               >
                 Close Window
               </button>
+            </div>
+          ) : isSubmitting ? (
+            <div className="flex flex-col items-center justify-center text-center py-10 animate-fade-in">
+              <div className="relative">
+                <Loader2 size={64} className="text-brand-lime animate-spin" />
+              </div>
+              <p className="mt-8 font-heading text-lg font-bold text-brand-navy tracking-tight">Processing your request...</p>
+              <p className="text-gray-400 text-sm mt-2">Connecting with our premium artisans</p>
             </div>
           ) : (
             <>

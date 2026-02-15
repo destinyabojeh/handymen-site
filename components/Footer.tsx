@@ -41,7 +41,17 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* About */}
           <div>
-            <h3 className="font-heading text-xl font-bold mb-4 text-white">Handymen<span className="text-brand-lime">.Ng</span></h3>
+            <div className="flex items-center gap-2 mb-4">
+              <img 
+                src="logo.jpg" 
+                alt="Logo" 
+                className="h-8 w-auto object-contain" 
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+              <h3 className="font-heading text-xl font-bold text-white">Handymen<span className="text-brand-lime">.Ng</span></h3>
+            </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               Your trusted partner for home maintenance, renovation, and premium relocation services in Nigeria. We bring professionalism to your doorstep.
             </p>

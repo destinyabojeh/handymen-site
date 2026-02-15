@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { Wrench, Truck, ShieldCheck, Star, ArrowRight, Hammer, CheckCircle } from 'lucide-react';
 import { useBooking } from '../context/BookingContext';
 
+const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
+  <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`}></div>
+);
+
 const RotatingHeroText: React.FC = () => {
   const messages = [
     "Partner with Handymen.NG",
@@ -36,6 +40,15 @@ const RotatingHeroText: React.FC = () => {
 
 const Home: React.FC = () => {
   const { openBooking } = useBooking();
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
+
+  useEffect(() => {
+    // Simulate fetching testimonials
+    const timer = setTimeout(() => {
+      setLoadingTestimonials(false);
+    }, 1800);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="flex flex-col w-full">
@@ -238,39 +251,72 @@ const Home: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4">
            <h2 className="font-heading text-3xl font-bold text-center text-brand-navy mb-16">What Our Clients Say</h2>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-brand-light p-10 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 relative">
-                <div className="absolute top-0 right-0 p-6 opacity-10">
-                   <ShieldCheck size={60} className="text-brand-navy" />
-                </div>
-                <div className="flex text-brand-lime mb-6">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
-                </div>
-                <p className="text-brand-navy/80 italic mb-8 text-lg font-light leading-relaxed">"Handymen.Ng made my move from the UK effortless. They set up my parents' home perfectly. I could relax knowing it was in trusted hands."</p>
-                <div className="flex items-center">
-                   <div className="w-12 h-12 bg-brand-navy rounded-full flex items-center justify-center text-brand-lime font-bold mr-4 border border-brand-lime/30">CA</div>
-                   <div>
-                      <p className="font-bold text-brand-navy">Chidi A.</p>
-                      <p className="text-sm text-gray-500">London / Lagos</p>
-                   </div>
-                </div>
-              </div>
+              {loadingTestimonials ? (
+                <>
+                  <div className="bg-brand-light p-10 rounded-xl border border-gray-100">
+                    <Skeleton className="w-24 h-4 mb-6" />
+                    <Skeleton className="w-full h-4 mb-2" />
+                    <Skeleton className="w-full h-4 mb-2" />
+                    <Skeleton className="w-3/4 h-4 mb-8" />
+                    <div className="flex items-center">
+                      <Skeleton className="w-12 h-12 rounded-full mr-4" />
+                      <div className="space-y-2">
+                        <Skeleton className="w-24 h-3" />
+                        <Skeleton className="w-16 h-2" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-brand-light p-10 rounded-xl border border-gray-100">
+                    <Skeleton className="w-24 h-4 mb-6" />
+                    <Skeleton className="w-full h-4 mb-2" />
+                    <Skeleton className="w-full h-4 mb-2" />
+                    <Skeleton className="w-3/4 h-4 mb-8" />
+                    <div className="flex items-center">
+                      <Skeleton className="w-12 h-12 rounded-full mr-4" />
+                      <div className="space-y-2">
+                        <Skeleton className="w-24 h-3" />
+                        <Skeleton className="w-16 h-2" />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="bg-brand-light p-10 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 relative animate-fade-in">
+                    <div className="absolute top-0 right-0 p-6 opacity-10">
+                       <ShieldCheck size={60} className="text-brand-navy" />
+                    </div>
+                    <div className="flex text-brand-lime mb-6">
+                      {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
+                    </div>
+                    <p className="text-brand-navy/80 italic mb-8 text-lg font-light leading-relaxed">"Handymen.Ng made my move from the UK effortless. They set up my parents' home perfectly. I could relax knowing it was in trusted hands."</p>
+                    <div className="flex items-center">
+                       <div className="w-12 h-12 bg-brand-navy rounded-full flex items-center justify-center text-brand-lime font-bold mr-4 border border-brand-lime/30">CA</div>
+                       <div>
+                          <p className="font-bold text-brand-navy">Chidi A.</p>
+                          <p className="text-sm text-gray-500">London / Lagos</p>
+                       </div>
+                    </div>
+                  </div>
 
-              <div className="bg-brand-light p-10 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 relative">
-                <div className="absolute top-0 right-0 p-6 opacity-10">
-                   <ShieldCheck size={60} className="text-brand-navy" />
-                </div>
-                <div className="flex text-brand-lime mb-6">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
-                </div>
-                <p className="text-brand-navy/80 italic mb-8 text-lg font-light leading-relaxed">"Found a plumber through them in 10 minutes. Fair price, great work. Finally, a service I can trust in Lagos."</p>
-                <div className="flex items-center">
-                   <div className="w-12 h-12 bg-brand-navy rounded-full flex items-center justify-center text-brand-lime font-bold mr-4 border border-brand-lime/30">FO</div>
-                   <div>
-                      <p className="font-bold text-brand-navy">Funmi O.</p>
-                      <p className="text-sm text-gray-500">Lekki, Lagos</p>
-                   </div>
-                </div>
-              </div>
+                  <div className="bg-brand-light p-10 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 relative animate-fade-in">
+                    <div className="absolute top-0 right-0 p-6 opacity-10">
+                       <ShieldCheck size={60} className="text-brand-navy" />
+                    </div>
+                    <div className="flex text-brand-lime mb-6">
+                      {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
+                    </div>
+                    <p className="text-brand-navy/80 italic mb-8 text-lg font-light leading-relaxed">"Found a plumber through them in 10 minutes. Fair price, great work. Finally, a service I can trust in Lagos."</p>
+                    <div className="flex items-center">
+                       <div className="w-12 h-12 bg-brand-navy rounded-full flex items-center justify-center text-brand-lime font-bold mr-4 border border-brand-lime/30">FO</div>
+                       <div>
+                          <p className="font-bold text-brand-navy">Funmi O.</p>
+                          <p className="text-sm text-gray-500">Lekki, Lagos</p>
+                       </div>
+                    </div>
+                  </div>
+                </>
+              )}
            </div>
         </div>
       </div>

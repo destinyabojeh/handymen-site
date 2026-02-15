@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Phone, MapPin, Clock, MessageCircle, Wrench, Truck, Hammer, CheckCircle, ChevronRight, Check, Mail } from 'lucide-react';
+import { Phone, MapPin, Clock, MessageCircle, Wrench, Truck, Hammer, CheckCircle, ChevronRight, Check, Mail, Loader2 } from 'lucide-react';
 import { GoogleGenAI, Modality } from "@google/genai";
 
 // Audio Processing Helpers
@@ -48,6 +48,7 @@ const Contact: React.FC = () => {
   });
   
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   // Auto-populate based on navigation state
@@ -128,8 +129,14 @@ const Contact: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setIsSubmitting(false);
     setIsSubmitted(true);
     playSuccessVoice();
     
@@ -171,12 +178,13 @@ const Contact: React.FC = () => {
             <button
               key={card.id}
               type="button"
+              disabled={isSubmitting}
               onClick={() => handleServiceSelect(card.id)}
               className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-500 group relative ${
                 formData.serviceType === card.id 
                 ? 'bg-brand-navy border-brand-lime shadow-lg scale-[1.03] z-20' 
                 : 'bg-white border-gray-100 hover:border-brand-lime/40 z-10'
-              }`}
+              } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${
                 formData.serviceType === card.id ? 'bg-brand-lime text-brand-navy' : 'bg-brand-light text-brand-navy'
@@ -193,7 +201,7 @@ const Contact: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start max-w-6xl mx-auto">
-          <div ref={formRef} className="lg:col-span-7 bg-white rounded-[2rem] shadow-xl p-8 md:p-10 border border-gray-100 relative overflow-hidden">
+          <div ref={formRef} className="lg:col-span-7 bg-white rounded-[2rem] shadow-xl p-8 md:p-10 border border-gray-100 relative overflow-hidden min-h-[400px] flex flex-col justify-center">
             {isSubmitted ? (
               <div className="py-12 flex flex-col items-center justify-center text-center animate-fade-in">
                 <div className={`w-24 h-24 bg-brand-lime/10 text-brand-navy rounded-full flex items-center justify-center mb-6 border border-brand-lime transition-all duration-500 ${isPlayingAudio ? 'scale-110 shadow-lime-glow ring-4 ring-brand-lime/20' : 'scale-100'}`}>
@@ -201,6 +209,12 @@ const Contact: React.FC = () => {
                 </div>
                 <h3 className="text-2xl font-heading font-bold text-brand-navy mb-2">Request Logged!</h3>
                 <p className="text-gray-500 text-sm max-w-xs mx-auto">One of our experts will call you within 60 minutes.</p>
+              </div>
+            ) : isSubmitting ? (
+              <div className="py-12 flex flex-col items-center justify-center text-center animate-fade-in">
+                <Loader2 size={48} className="text-brand-lime animate-spin mb-6" />
+                <h3 className="text-2xl font-heading font-bold text-brand-navy mb-2">Submitting Request...</h3>
+                <p className="text-gray-500 text-sm">Please wait while we log your service details.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">

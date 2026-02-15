@@ -21,8 +21,15 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center gap-2 group">
-              {/* Logo icon could be an image or SVG. Using text for now as per prompt instructions imply a text rebrand */}
+            <Link to="/" className="flex-shrink-0 flex items-center gap-3 group">
+              <img 
+                src="logo.jpg" 
+                alt="Handymen.Ng Logo" 
+                className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
               <span className="font-heading font-bold text-2xl text-white transition-colors duration-300">
                 Handymen<span className="text-brand-lime">.Ng</span>
               </span>
