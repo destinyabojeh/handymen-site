@@ -12,6 +12,11 @@ const BookingModal: React.FC = () => {
     if (isBookingOpen) {
       document.body.style.overflow = 'hidden';
       if (initialService) setSelectedService(initialService);
+      
+      // Pre-load voices to ensure they are available when needed
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
     } else {
       document.body.style.overflow = 'unset';
       // Reset form after delay
@@ -26,8 +31,40 @@ const BookingModal: React.FC = () => {
 
   if (!isBookingOpen) return null;
 
+  const playSuccessAudio = () => {
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      const text = "Request sent. We will be in touch shortly.";
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Configure for a "calm/premium" feel
+      utterance.rate = 0.9; // Slightly slower is often perceived as more professional
+      utterance.pitch = 1;  // Natural pitch
+      utterance.volume = 1;
+
+      // Attempt to select a high-quality female voice
+      const voices = window.speechSynthesis.getVoices();
+      const femaleVoice = voices.find(v => 
+        v.name.includes('Google US English') || // Chrome (Female by default often)
+        v.name.includes('Samantha') ||          // macOS
+        v.name.includes('Microsoft Zira') ||    // Windows
+        v.name.toLowerCase().includes('female') // Generic fallback
+      );
+      
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Play the audio feedback
+    playSuccessAudio();
     // Simulate API submission
     setTimeout(() => setStep(2), 500);
   };

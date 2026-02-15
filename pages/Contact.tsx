@@ -20,8 +20,35 @@ const Contact: React.FC = () => {
     });
   };
 
+  const playSuccessAudio = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const text = "Request sent. We will be in touch shortly.";
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      utterance.rate = 0.9; 
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      const voices = window.speechSynthesis.getVoices();
+      const femaleVoice = voices.find(v => 
+        v.name.includes('Google US English') || 
+        v.name.includes('Samantha') || 
+        v.name.includes('Microsoft Zira') ||
+        v.name.toLowerCase().includes('female')
+      );
+      
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    playSuccessAudio();
     // Simulate API call
     console.log(formData);
     setIsSubmitted(true);
