@@ -1,6 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, MapPin, Phone, Mail, MessageCircle } from 'lucide-react';
+import { Facebook, Instagram, MapPin, Phone, Mail, MessageCircle, Youtube } from 'lucide-react';
+
+const TikTokIcon = ({ size = 20, className = "" }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
 
 const Footer: React.FC = () => {
   return (
@@ -11,12 +27,13 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="font-heading text-xl font-bold mb-4 text-white">Handymen<span className="text-brand-lime">.Ng</span></h3>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Your trusted partner for home maintenance, renovation, and premium relocation services in Nigeria. We bring professionalism, reliability, and quality to your doorstep.
+              Your trusted partner for home maintenance, renovation, and premium relocation services in Nigeria. We bring professionalism to your doorstep.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-brand-lime transition-colors duration-300"><Facebook size={20} /></a>
-              <a href="#" className="text-gray-400 hover:text-brand-lime transition-colors duration-300"><Twitter size={20} /></a>
-              <a href="#" className="text-gray-400 hover:text-brand-lime transition-colors duration-300"><Instagram size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="Facebook"><Facebook size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="Instagram"><Instagram size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="YouTube"><Youtube size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="TikTok"><TikTokIcon size={20} /></a>
             </div>
           </div>
 

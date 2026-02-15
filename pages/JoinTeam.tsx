@@ -1,5 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ShieldCheck, Award, TrendingUp, Users, ArrowRight, Star } from 'lucide-react';
+import { Check, ShieldCheck, Award, TrendingUp, Users, ArrowRight, Star, Youtube, Instagram, Facebook } from 'lucide-react';
+
+const TikTokIcon = ({ size = 24, className = "" }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
 
 const JoinTeam: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +29,6 @@ const JoinTeam: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    // Pre-load voices for the premium audio experience
     if ('speechSynthesis' in window) {
       window.speechSynthesis.getVoices();
     }
@@ -24,8 +39,7 @@ const JoinTeam: React.FC = () => {
       window.speechSynthesis.cancel();
       const text = "Application sent. Our team will review your profile shortly.";
       const utterance = new SpeechSynthesisUtterance(text);
-      
-      utterance.rate = 0.85; // Calmer, slower premium pace
+      utterance.rate = 0.85;
       utterance.pitch = 1;
       utterance.volume = 1;
 
@@ -37,10 +51,7 @@ const JoinTeam: React.FC = () => {
         v.name.toLowerCase().includes('female')
       );
       
-      if (femaleVoice) {
-        utterance.voice = femaleVoice;
-      }
-
+      if (femaleVoice) utterance.voice = femaleVoice;
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -67,7 +78,6 @@ const JoinTeam: React.FC = () => {
             className="w-full h-full object-cover opacity-20 scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/80 to-transparent"></div>
-          {/* Decorative Brand Pattern */}
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#adf802_1px,transparent_1px)] [background-size:30px_30px]"></div>
         </div>
 
@@ -106,7 +116,7 @@ const JoinTeam: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-1">Guaranteed High-Value Jobs</h4>
-                    <p className="text-gray-400 text-sm leading-relaxed">Access to premium clients in Lagos' most exclusive neighborhoods. No more bidding wars.</p>
+                    <p className="text-gray-400 text-sm leading-relaxed">Access to premium clients in Lagos' most exclusive neighborhoods.</p>
                   </div>
                 </div>
 
@@ -116,7 +126,7 @@ const JoinTeam: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-1">Instant Payouts</h4>
-                    <p className="text-gray-400 text-sm leading-relaxed">Get paid immediately upon successful job completion and verification. Cashflow you can rely on.</p>
+                    <p className="text-gray-400 text-sm leading-relaxed">Get paid immediately upon successful job completion and verification.</p>
                   </div>
                 </div>
 
@@ -126,7 +136,7 @@ const JoinTeam: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-1">Professional Branding</h4>
-                    <p className="text-gray-400 text-sm leading-relaxed">Leverage our reputation. We handle the marketing, customer support, and dispute resolution.</p>
+                    <p className="text-gray-400 text-sm leading-relaxed">Leverage our reputation. We handle the marketing and customer support.</p>
                   </div>
                 </div>
               </div>
@@ -145,7 +155,7 @@ const JoinTeam: React.FC = () => {
 
             {/* Testimonial Feature */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 italic text-gray-600">
-               <p className="mb-4">"Handymen.Ng changed everything for my business. I focus on my craft, they handle the rest. The pay is honest and the clients are respectful."</p>
+               <p className="mb-4">"Handymen.Ng changed everything for my business. I focus on my craft, they handle the rest."</p>
                <div className="flex items-center gap-3 not-italic">
                   <div className="w-10 h-10 bg-brand-navy rounded-full flex items-center justify-center text-brand-lime font-bold">SO</div>
                   <div>
@@ -166,7 +176,7 @@ const JoinTeam: React.FC = () => {
                     </div>
                     <h3 className="font-heading text-4xl font-bold text-brand-navy mb-4">Application Received</h3>
                     <p className="text-gray-500 text-lg max-w-md mx-auto mb-10 leading-relaxed">
-                      Thank you for your interest in joining Handymen.Ng. Our verification committee will review your credentials and contact you within 48 business hours.
+                      Thank you for your interest. Our verification committee will contact you within 48 business hours.
                     </p>
                     <button 
                       onClick={() => setIsSubmitted(false)}
@@ -184,128 +194,83 @@ const JoinTeam: React.FC = () => {
 
                     <form className="space-y-6" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="relative">
-                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Full Professional Name</label>
-                          <input 
-                            type="text" 
-                            name="fullName"
-                            required
-                            placeholder="e.g. Samuel Okoro" 
-                            value={formData.fullName}
-                            onChange={handleChange}
-                            className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime focus:ring-0 outline-none transition-all bg-gray-50/50 font-medium" 
-                          />
+                        <div>
+                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Full Name</label>
+                          <input type="text" name="fullName" required placeholder="e.g. Samuel Okoro" value={formData.fullName} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
                         </div>
-                        <div className="relative">
-                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Direct Contact Line</label>
-                          <input 
-                            type="tel" 
-                            name="phone"
-                            required
-                            placeholder="080 0000 0000" 
-                            value={formData.phone}
-                            onChange={handleChange}
-                            className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime focus:ring-0 outline-none transition-all bg-gray-50/50 font-medium" 
-                          />
+                        <div>
+                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Phone Number</label>
+                          <input type="tel" name="phone" required placeholder="080 0000 0000" value={formData.phone} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
                         </div>
                       </div>
-                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="relative">
+                        <div>
                           <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Core Expertise</label>
-                          <select 
-                            name="trade"
-                            className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime focus:ring-0 outline-none bg-gray-50/50 transition-all font-medium appearance-none"
-                            onChange={handleChange}
-                            value={formData.trade}
-                            required
-                          >
+                          <select name="trade" className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50 appearance-none" onChange={handleChange} value={formData.trade} required>
                             <option value="">Select Your Trade</option>
                             <option value="Plumber">Plumbing Specialist</option>
                             <option value="Electrician">Electrical Engineering</option>
                             <option value="Carpenter">Fine Carpentry</option>
-                            <option value="Painter">Professional Painting & Finish</option>
+                            <option value="Painter">Professional Painting</option>
                             <option value="AC Technician">HVAC/AC Maintenance</option>
                             <option value="Cleaner">Premium Deep Cleaning</option>
                             <option value="Other">Other Specialty</option>
                           </select>
                         </div>
-                        <div className="relative">
+                        <div>
                            <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Operational Area</label>
-                           <input 
-                            type="text" 
-                            name="area"
-                            required
-                            placeholder="e.g. Victoria Island, Ikeja" 
-                            value={formData.area}
-                            onChange={handleChange}
-                            className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime focus:ring-0 outline-none transition-all bg-gray-50/50 font-medium" 
-                          />
+                           <input type="text" name="area" required placeholder="e.g. Victoria Island, Ikeja" value={formData.area} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
                         </div>
                       </div>
-
-                      {formData.trade === 'Other' && (
-                        <div className="animate-fade-in">
-                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Specify Your Trade</label>
-                          <input 
-                            type="text" 
-                            name="otherTrade"
-                            required
-                            placeholder="Please define your expertise" 
-                            value={formData.otherTrade}
-                            onChange={handleChange}
-                            className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime focus:ring-0 outline-none transition-all bg-gray-50/50 font-medium" 
-                          />
-                        </div>
-                      )}
-
                       <div className="p-6 bg-brand-light rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
                          <span className="text-brand-navy font-bold text-sm uppercase tracking-wider">Do you own professional tools?</span>
                          <div className="flex gap-4">
-                            <label className="flex items-center gap-3 cursor-pointer group">
-                              <input 
-                                  type="radio" 
-                                  name="ownTools" 
-                                  value="yes" 
-                                  checked={formData.ownTools === 'yes'}
-                                  onChange={handleChange}
-                                  required 
-                                  className="w-5 h-5 accent-brand-navy cursor-pointer" 
-                                /> 
-                                <span className="font-bold text-sm">Yes</span>
-                            </label>
-                            <label className="flex items-center gap-3 cursor-pointer group">
-                              <input 
-                                  type="radio" 
-                                  name="ownTools" 
-                                  value="no" 
-                                  checked={formData.ownTools === 'no'}
-                                  onChange={handleChange}
-                                  required 
-                                  className="w-5 h-5 accent-brand-navy cursor-pointer" 
-                                /> 
-                                <span className="font-bold text-sm">No</span>
-                            </label>
+                            <label className="flex items-center gap-3 cursor-pointer"><input type="radio" name="ownTools" value="yes" checked={formData.ownTools === 'yes'} onChange={handleChange} required className="w-5 h-5 accent-brand-navy" /> <span className="font-bold text-sm">Yes</span></label>
+                            <label className="flex items-center gap-3 cursor-pointer"><input type="radio" name="ownTools" value="no" checked={formData.ownTools === 'no'} onChange={handleChange} required className="w-5 h-5 accent-brand-navy" /> <span className="font-bold text-sm">No</span></label>
                          </div>
                       </div>
-
-                      <div className="pt-4">
-                        <button 
-                          type="submit" 
-                          className="w-full bg-brand-navy text-white font-bold py-5 rounded-2xl hover:bg-brand-lime hover:text-brand-navy transition-all duration-500 shadow-xl hover:shadow-lime-glow transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3 group"
-                        >
-                          Submit Executive Application
-                          <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
-                        </button>
-                        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-400 font-medium uppercase tracking-[0.15em]">
-                           <ShieldCheck size={14} className="text-brand-lime" />
-                           Your data is secure and verified
-                        </div>
-                      </div>
+                      <button type="submit" className="w-full bg-brand-navy text-white font-bold py-5 rounded-2xl hover:bg-brand-lime hover:text-brand-navy transition-all duration-500 shadow-xl hover:shadow-lime-glow text-lg flex items-center justify-center gap-3 group">
+                        Submit Executive Application <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
+                      </button>
                     </form>
                   </>
                 )}
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* NEW: Social Media Section */}
+      <div className="bg-brand-navy py-24 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-lime/5 rounded-full blur-[100px]"></div>
+        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">Connect with Our Community</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto mb-16 text-lg">Follow us for pro tips, success stories, and behind-the-scenes content from our premium network.</p>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <Youtube className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
+              <span className="text-white font-bold text-sm uppercase tracking-widest">YouTube</span>
+              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Watch Pro Tips</p>
+            </a>
+            
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <Instagram className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
+              <span className="text-white font-bold text-sm uppercase tracking-widest">Instagram</span>
+              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">See Our Work</p>
+            </a>
+            
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <Facebook className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
+              <span className="text-white font-bold text-sm uppercase tracking-widest">Facebook</span>
+              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Join Discussions</p>
+            </a>
+            
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <TikTokIcon className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
+              <span className="text-white font-bold text-sm uppercase tracking-widest">TikTok</span>
+              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Daily Highlights</p>
+            </a>
           </div>
         </div>
       </div>
@@ -315,7 +280,6 @@ const JoinTeam: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 text-center">
            <h4 className="text-gray-400 uppercase tracking-widest text-xs font-bold mb-10">Our Partners Work with Leading Property Managers</h4>
            <div className="flex flex-wrap justify-center items-center gap-12 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-              {/* Using text logos for consistency as per previous instructions */}
               <span className="text-2xl font-bold font-heading">ISLAND ESTATES</span>
               <span className="text-2xl font-bold font-heading">MAINLAND PROPS</span>
               <span className="text-2xl font-bold font-heading">LEKKI LUXURY</span>
