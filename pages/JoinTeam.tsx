@@ -1,5 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ShieldCheck, Award, TrendingUp, Users, ArrowRight, Star, Youtube, Instagram, Facebook } from 'lucide-react';
+import { Check, ShieldCheck, Award, TrendingUp, Users, ArrowRight, Star, Youtube, Instagram, Facebook, Mail } from 'lucide-react';
+import { GoogleGenAI, Modality } from "@google/genai";
+
+// Audio Processing Helpers
+function decode(base64: string) {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
+
+async function decodeAudioData(
+  data: Uint8Array,
+  ctx: AudioContext,
+  sampleRate: number,
+  numChannels: number,
+): Promise<AudioBuffer> {
+  const dataInt16 = new Int16Array(data.buffer);
+  const frameCount = dataInt16.length / numChannels;
+  const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
+
+  for (let channel = 0; channel < numChannels; channel++) {
+    const channelData = buffer.getChannelData(channel);
+    for (let i = 0; i < frameCount; i++) {
+      channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
+    }
+  }
+  return buffer;
+}
 
 const TikTokIcon = ({ size = 24, className = "" }) => (
   <svg 
@@ -37,38 +68,46 @@ const JoinTeam: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
+    email: '',
     trade: '',
     otherTrade: '',
     ownTools: '',
     area: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
-  useEffect(() => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-    }
-  }, []);
+  const playSuccessVoice = async () => {
+    try {
+      setIsPlayingAudio(true);
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-preview-tts",
+        contents: [{ parts: [{ text: 'Say with a warm, premium voice: Request sent, we would get to you shortly.' }] }],
+        config: {
+          responseModalities: [Modality.AUDIO],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: 'Kore' },
+            },
+          },
+        },
+      });
 
-  const playSuccessAudio = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const text = "Application sent. Our team will review your profile shortly.";
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.85;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-
-      const voices = window.speechSynthesis.getVoices();
-      const femaleVoice = voices.find(v => 
-        v.name.includes('Google US English') || 
-        v.name.includes('Samantha') || 
-        v.name.includes('Microsoft Zira') ||
-        v.name.toLowerCase().includes('female')
-      );
-      
-      if (femaleVoice) utterance.voice = femaleVoice;
-      window.speechSynthesis.speak(utterance);
+      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (base64Audio) {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+        const decodedBytes = decode(base64Audio);
+        const audioBuffer = await decodeAudioData(decodedBytes, audioContext, 24000, 1);
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+        source.start();
+        source.onended = () => setIsPlayingAudio(false);
+      }
+    } catch (error) {
+      console.error("TTS Error:", error);
+      setIsPlayingAudio(false);
     }
   };
 
@@ -79,8 +118,8 @@ const JoinTeam: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    playSuccessAudio();
     setIsSubmitted(true);
+    playSuccessVoice();
   };
 
   return (
@@ -187,8 +226,8 @@ const JoinTeam: React.FC = () => {
             <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100 relative overflow-hidden">
                {isSubmitted ? (
                   <div className="py-20 text-center animate-fade-in">
-                    <div className="w-24 h-24 bg-brand-lime/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-brand-lime shadow-lime-glow">
-                      <Check size={48} className="text-brand-navy" />
+                    <div className={`w-24 h-24 bg-brand-lime/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-brand-lime shadow-lime-glow transition-all duration-500 ${isPlayingAudio ? 'ring-4 ring-brand-lime/20 scale-110' : 'scale-100'}`}>
+                      <Check size={48} className={`text-brand-navy ${isPlayingAudio ? 'animate-pulse' : ''}`} />
                     </div>
                     <h3 className="font-heading text-4xl font-bold text-brand-navy mb-4">Application Received</h3>
                     <p className="text-gray-500 text-lg max-w-md mx-auto mb-10 leading-relaxed">
@@ -215,8 +254,23 @@ const JoinTeam: React.FC = () => {
                           <input type="text" name="fullName" required placeholder="e.g. Samuel Okoro" value={formData.fullName} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
                         </div>
                         <div>
+                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Email (Optional)</label>
+                          <div className="relative group">
+                            <div className="absolute left-0 inset-y-0 w-12 flex items-center justify-center border-r border-gray-200 text-gray-400 group-focus-within:text-brand-lime transition-colors">
+                              <Mail size={18} />
+                            </div>
+                            <input type="email" name="email" placeholder="e.g. sam@example.com" value={formData.email} onChange={handleChange} className="w-full p-4 pl-14 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
                           <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Phone Number</label>
                           <input type="tel" name="phone" required placeholder="080 0000 0000" value={formData.phone} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
+                        </div>
+                        <div>
+                           <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Operational Area</label>
+                           <input type="text" name="area" required placeholder="e.g. Victoria Island, Ikeja" value={formData.area} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -233,17 +287,13 @@ const JoinTeam: React.FC = () => {
                             <option value="Other">Other Specialty</option>
                           </select>
                         </div>
-                        <div>
-                           <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Operational Area</label>
-                           <input type="text" name="area" required placeholder="e.g. Victoria Island, Ikeja" value={formData.area} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
+                        <div className="p-6 bg-brand-light rounded-2xl border border-gray-100 flex items-center justify-between gap-4 h-full">
+                           <span className="text-brand-navy font-bold text-xs uppercase tracking-wider">Own tools?</span>
+                           <div className="flex gap-4">
+                              <label className="flex items-center gap-3 cursor-pointer"><input type="radio" name="ownTools" value="yes" checked={formData.ownTools === 'yes'} onChange={handleChange} required className="w-5 h-5 accent-brand-navy" /> <span className="font-bold text-sm">Yes</span></label>
+                              <label className="flex items-center gap-3 cursor-pointer"><input type="radio" name="ownTools" value="no" checked={formData.ownTools === 'no'} onChange={handleChange} required className="w-5 h-5 accent-brand-navy" /> <span className="font-bold text-sm">No</span></label>
+                           </div>
                         </div>
-                      </div>
-                      <div className="p-6 bg-brand-light rounded-2xl border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
-                         <span className="text-brand-navy font-bold text-sm uppercase tracking-wider">Do you own professional tools?</span>
-                         <div className="flex gap-4">
-                            <label className="flex items-center gap-3 cursor-pointer"><input type="radio" name="ownTools" value="yes" checked={formData.ownTools === 'yes'} onChange={handleChange} required className="w-5 h-5 accent-brand-navy" /> <span className="font-bold text-sm">Yes</span></label>
-                            <label className="flex items-center gap-3 cursor-pointer"><input type="radio" name="ownTools" value="no" checked={formData.ownTools === 'no'} onChange={handleChange} required className="w-5 h-5 accent-brand-navy" /> <span className="font-bold text-sm">No</span></label>
-                         </div>
                       </div>
                       <button type="submit" className="w-full bg-brand-navy text-white font-bold py-5 rounded-2xl hover:bg-brand-lime hover:text-brand-navy transition-all duration-500 shadow-xl hover:shadow-lime-glow text-lg flex items-center justify-center gap-3 group">
                         Submit Executive Application <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
@@ -256,7 +306,7 @@ const JoinTeam: React.FC = () => {
         </div>
       </div>
 
-      {/* NEW: Social Media Section */}
+      {/* Social Media Section */}
       <div className="bg-brand-navy py-24 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-lime/5 rounded-full blur-[100px]"></div>
         <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">

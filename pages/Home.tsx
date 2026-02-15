@@ -41,28 +41,14 @@ const Home: React.FC = () => {
     <div className="flex flex-col w-full">
       {/* Hero Section */}
       <div className="relative bg-brand-navy h-[750px] flex items-center overflow-hidden group">
-        {/* Background Image & Stylish Overlay */}
         <div className="absolute inset-0 z-0">
-          {/* 
-             USER INSTRUCTION: 
-             Download the image from your Google Photos link and save it as 'hero-bg.jpg' 
-             in your project's public/ folder. 
-          */}
           <img 
-            src="hero-bg.jpg" 
-            onError={(e) => {
-              // Fallback placeholder that matches the 'Professional Team' vibe
-              e.currentTarget.src = "https://images.unsplash.com/photo-1581578731117-104f2a41272c?q=80&w=2070&auto=format&fit=crop";
-            }}
+            src="https://images.unsplash.com/photo-1581578731117-104f2a41272c?q=80&w=2070&auto=format&fit=crop"
             alt="Handymen.Ng Professional Team" 
             className="w-full h-full object-cover object-center transform scale-100 transition-transform duration-[30s] group-hover:scale-110 ease-out will-change-transform"
           />
-          
-          {/* Stylish Gradients for Depth & Readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/70 to-brand-navy/40 mix-blend-multiply"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-brand-navy/80"></div>
-          
-          {/* Subtle texture for premium feel */}
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#adf802_1px,transparent_1px)] [background-size:20px_20px]"></div>
         </div>
         
@@ -76,7 +62,6 @@ const Home: React.FC = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-lime to-[#c0ff4d] drop-shadow-sm filter">Perfectly Handled.</span>
           </h1>
 
-          {/* New Stylish Description - Smaller Size */}
           <div className="max-w-xl mx-auto mb-6 relative">
             <p className="text-sm md:text-base text-gray-200 font-light leading-relaxed drop-shadow-md tracking-wide">
               From a leaking tap to a renovation plan or full luxury move-in, Handymen.Ng delivers trusted, premium service.
@@ -84,25 +69,28 @@ const Home: React.FC = () => {
             <p className="text-base md:text-lg font-medium text-white mt-2 drop-shadow-sm">
               One call. <span className="text-brand-lime/90 italic">Everything solved.</span>
             </p>
-            {/* Decorative line */}
             <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-brand-lime to-transparent opacity-50 mx-auto mt-4"></div>
           </div>
           
           <RotatingHeroText />
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
-            <button 
-              onClick={() => openBooking('handyman')}
+            <Link 
+              to="/handyman"
               className="px-8 py-4 bg-brand-lime text-brand-navy font-bold rounded-lg hover:bg-gradient-to-r hover:from-brand-lime hover:to-brand-limeHover transition-all duration-300 shadow-[0_0_20px_rgba(173,248,2,0.3)] hover:shadow-[0_0_30px_rgba(173,248,2,0.5)] transform hover:-translate-y-1 text-center min-w-[200px]"
             >
               Book a Handyman
-            </button>
-            <Link to="/move-in" className="px-8 py-4 border border-brand-lime/30 text-white font-bold rounded-lg hover:border-brand-lime hover:text-brand-lime transition-all duration-300 transform hover:-translate-y-1 text-center flex items-center justify-center gap-2 min-w-[200px] bg-brand-navy/40 backdrop-blur-md hover:bg-brand-navy/60">
-              <span className="flex items-center gap-2">
-                Explore Move-In <ArrowRight size={20} />
-              </span>
             </Link>
-            <Link to="/renovation" className="px-8 py-4 border border-gray-600 text-white font-bold rounded-lg hover:border-brand-lime hover:text-brand-lime transition-all duration-300 transform hover:-translate-y-1 text-center flex items-center justify-center gap-2 min-w-[200px] bg-brand-navy/40 backdrop-blur-md hover:bg-brand-navy/60">
+            <Link 
+              to="/move-in"
+              className="px-8 py-4 border border-brand-lime/30 text-white font-bold rounded-lg hover:border-brand-lime hover:text-brand-lime transition-all duration-300 transform hover:-translate-y-1 text-center flex items-center justify-center gap-2 min-w-[200px] bg-brand-navy/40 backdrop-blur-md hover:bg-brand-navy/60"
+            >
+              Explore Move-In <ArrowRight size={20} />
+            </Link>
+            <Link 
+              to="/renovation"
+              className="px-8 py-4 border border-gray-600 text-white font-bold rounded-lg hover:border-brand-lime hover:text-brand-lime transition-all duration-300 transform hover:-translate-y-1 text-center flex items-center justify-center gap-2 min-w-[200px] bg-brand-navy/40 backdrop-blur-md hover:bg-brand-navy/60"
+            >
                Renovations
             </Link>
           </div>
@@ -111,7 +99,6 @@ const Home: React.FC = () => {
 
       {/* Trusted By Strip */}
       <div className="bg-brand-light border-b border-gray-200 py-10 relative">
-        {/* Subtle accent in corner */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-brand-lime opacity-5 rounded-bl-full pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <p className="text-center text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Trusted by homeowners in premium locations in lagos on the island & mainland</p>
@@ -125,22 +112,28 @@ const Home: React.FC = () => {
       {/* Core Offerings (3 Columns) */}
       <div className="grid grid-cols-1 lg:grid-cols-3">
         {/* Column 1: Handyman */}
-        <div className="bg-white p-10 md:p-14 flex flex-col justify-start items-start border-b lg:border-b-0 lg:border-r border-gray-100 relative overflow-hidden group">
+        <Link 
+          to="/handyman"
+          className="bg-white p-10 md:p-14 flex flex-col justify-start items-start border-b lg:border-b-0 lg:border-r border-gray-100 relative overflow-hidden group text-left"
+        >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-lime to-brand-navy transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
           <div className="bg-brand-light p-4 rounded-full mb-6 group-hover:bg-brand-lime/10 transition-colors duration-300">
             <Wrench className="text-brand-navy w-8 h-8 group-hover:text-brand-lime transition-colors duration-300" />
           </div>
-          <h2 className="font-heading text-2xl font-bold text-brand-navy mb-4">Book a Handyman</h2>
+          <h2 className="font-heading text-2xl font-bold text-brand-navy mb-4">Handyman Services</h2>
           <p className="text-gray-600 mb-8 leading-relaxed">
             On-demand plumbing, electrical, painting, carpentry, and more. Fast, verified, reliable service for your everyday fixes.
           </p>
-          <Link to="/handyman" className="text-brand-navy font-bold hover:text-brand-lime transition-colors duration-300 flex items-center group/link">
-            Browse Services <ArrowRight size={18} className="ml-2 transform group-hover/link:translate-x-1 transition-transform" />
-          </Link>
-        </div>
+          <span className="text-brand-navy font-bold group-hover:text-brand-lime transition-colors duration-300 flex items-center group/link">
+            Get Started <ArrowRight size={18} className="ml-2 transform group-hover/link:translate-x-1 transition-transform" />
+          </span>
+        </Link>
 
         {/* Column 2: Move-In */}
-        <div className="bg-brand-light p-10 md:p-14 flex flex-col justify-start items-start border-b lg:border-b-0 lg:border-r border-gray-100 relative overflow-hidden group">
+        <Link 
+          to="/move-in"
+          className="bg-brand-light p-10 md:p-14 flex flex-col justify-start items-start border-b lg:border-b-0 lg:border-r border-gray-100 relative overflow-hidden group text-left"
+        >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-lime to-brand-navy transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
           <div className="bg-white p-4 rounded-full mb-6 shadow-sm group-hover:bg-brand-lime/10 transition-colors duration-300">
             <Truck className="text-brand-lime w-8 h-8" />
@@ -149,13 +142,16 @@ const Home: React.FC = () => {
           <p className="text-gray-600 mb-8 leading-relaxed">
             Full relocation & setup. Hand us the keys. We move, clean, paint, install, and arrange. You just show up to a ready home.
           </p>
-          <Link to="/move-in" className="text-brand-navy font-bold hover:text-brand-lime transition-colors duration-300 flex items-center group/link">
-            View Packages <ArrowRight size={18} className="ml-2 transform group-hover/link:translate-x-1 transition-transform" />
-          </Link>
-        </div>
+          <span className="text-brand-navy font-bold group-hover:text-brand-lime transition-colors duration-300 flex items-center group/link">
+            Book a Package <ArrowRight size={18} className="ml-2 transform group-hover/link:translate-x-1 transition-transform" />
+          </span>
+        </Link>
 
         {/* Column 3: Renovations */}
-        <div className="bg-white p-10 md:p-14 flex flex-col justify-start items-start relative overflow-hidden group">
+        <Link 
+          to="/renovation"
+          className="bg-white p-10 md:p-14 flex flex-col justify-start items-start relative overflow-hidden group text-left"
+        >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-lime to-brand-navy transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
           <div className="bg-brand-light p-4 rounded-full mb-6 group-hover:bg-brand-lime/10 transition-colors duration-300">
             <Hammer className="text-brand-navy w-8 h-8 group-hover:text-brand-lime transition-colors duration-300" />
@@ -164,10 +160,10 @@ const Home: React.FC = () => {
           <p className="text-gray-600 mb-8 leading-relaxed">
             Kitchen transformations, bathroom remodels, home extensions, and complete interior upgrades delivered with precision.
           </p>
-          <Link to="/renovation" className="text-brand-navy font-bold hover:text-brand-lime transition-colors duration-300 flex items-center group/link">
-            Start Your Project <ArrowRight size={18} className="ml-2 transform group-hover/link:translate-x-1 transition-transform" />
-          </Link>
-        </div>
+          <span className="text-brand-navy font-bold group-hover:text-brand-lime transition-colors duration-300 flex items-center group/link">
+            Request Quote <ArrowRight size={18} className="ml-2 transform group-hover/link:translate-x-1 transition-transform" />
+          </span>
+        </Link>
       </div>
 
       {/* Services Grid Preview */}
@@ -192,11 +188,15 @@ const Home: React.FC = () => {
               { icon: '🛋️', label: 'Assembly' },
               { icon: '📺', label: 'Installation' }
             ].map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center justify-center p-8 bg-white rounded-xl hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group border border-transparent hover:border-brand-lime/30 shadow-sm relative overflow-hidden">
+              <Link 
+                key={idx} 
+                to="/handyman"
+                className="flex flex-col items-center justify-center p-8 bg-white rounded-xl hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group border border-transparent hover:border-brand-lime/30 shadow-sm relative overflow-hidden"
+              >
                 <div className="absolute inset-0 bg-card-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="text-4xl mb-4 transform transition-transform duration-300 group-hover:scale-110 relative z-10">{item.icon}</span>
                 <span className="font-semibold text-gray-800 group-hover:text-brand-navy transition-colors duration-300 relative z-10">{item.label}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -204,7 +204,6 @@ const Home: React.FC = () => {
 
       {/* How It Works */}
       <div className="py-24 bg-brand-navy text-white relative overflow-hidden">
-        {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-brand-lime opacity-5 rounded-full filter blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-lime opacity-5 rounded-full filter blur-3xl transform translate-x-1/3 translate-y-1/3"></div>
 
