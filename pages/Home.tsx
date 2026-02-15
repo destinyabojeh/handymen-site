@@ -49,7 +49,7 @@ const Home: React.FC = () => {
              in your project's public/ folder. 
           */}
           <img 
-            src="/hero-bg.jpg" 
+            src="hero-bg.jpg" 
             onError={(e) => {
               // Fallback placeholder that matches the 'Professional Team' vibe
               e.currentTarget.src = "https://images.unsplash.com/photo-1581578731117-104f2a41272c?q=80&w=2070&auto=format&fit=crop";

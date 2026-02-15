@@ -114,7 +114,7 @@ const HandymanServices: React.FC = () => {
                   Save the image you provided as 'handyman-fixing-sink.jpg' in your project's public/ folder. 
                */}
                <img 
-                 src="/handyman-fixing-sink.jpg" 
+                 src="handyman-fixing-sink.jpg" 
                  onError={(e) => {
                    // Fallback to previous "person with helmet" image if local file is missing
                    e.currentTarget.src = "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop";
