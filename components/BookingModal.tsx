@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { X, Wrench, Truck, Hammer, CheckCircle, ArrowRight, Star } from 'lucide-react';
+import { X, Wrench, Truck, Hammer, CheckCircle, ArrowRight, Star, ChevronLeft } from 'lucide-react';
 import { useBooking } from '../context/BookingContext';
 
 const BookingModal: React.FC = () => {
   const { isBookingOpen, closeBooking, initialService } = useBooking();
   const [selectedService, setSelectedService] = useState('');
   const [formData, setFormData] = useState({ name: '', phone: '', details: '' });
-  const [step, setStep] = useState(1); // 1: Form, 2: Success
+  const [step, setStep] = useState(1); // 1: Selection, 2: Form, 3: Success
 
   useEffect(() => {
     if (isBookingOpen) {
       document.body.style.overflow = 'hidden';
-      if (initialService) setSelectedService(initialService);
       
-      // Pre-load voices to ensure they are available when needed
+      // If modal opened with a specific service, skip step 1
+      if (initialService) {
+        setSelectedService(initialService);
+        setStep(2);
+      } else {
+        setStep(1);
+        setSelectedService('');
+      }
+      
       if ('speechSynthesis' in window) {
         window.speechSynthesis.getVoices();
       }
     } else {
       document.body.style.overflow = 'unset';
-      // Reset form after delay
       setTimeout(() => {
         setStep(1);
         setFormData({ name: '', phone: '', details: '' });
@@ -33,40 +39,53 @@ const BookingModal: React.FC = () => {
 
   const playSuccessAudio = () => {
     if ('speechSynthesis' in window) {
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
-
       const text = "Request sent. We will be in touch shortly.";
       const utterance = new SpeechSynthesisUtterance(text);
-      
-      // Configure for a "calm/premium" feel
-      utterance.rate = 0.9; // Slightly slower is often perceived as more professional
-      utterance.pitch = 1;  // Natural pitch
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
       utterance.volume = 1;
 
-      // Attempt to select a high-quality female voice
       const voices = window.speechSynthesis.getVoices();
       const femaleVoice = voices.find(v => 
-        v.name.includes('Google US English') || // Chrome (Female by default often)
-        v.name.includes('Samantha') ||          // macOS
-        v.name.includes('Microsoft Zira') ||    // Windows
-        v.name.toLowerCase().includes('female') // Generic fallback
+        v.name.includes('Google US English') || 
+        v.name.includes('Samantha') || 
+        v.name.includes('Microsoft Zira') ||
+        v.name.toLowerCase().includes('female')
       );
       
-      if (femaleVoice) {
-        utterance.voice = femaleVoice;
-      }
-
+      if (femaleVoice) utterance.voice = femaleVoice;
       window.speechSynthesis.speak(utterance);
     }
   };
 
+  const handleServiceSelect = (serviceId: string) => {
+    setSelectedService(serviceId);
+    setStep(2); // Proceed to form
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Play the audio feedback
     playSuccessAudio();
-    // Simulate API submission
-    setTimeout(() => setStep(2), 500);
+    setTimeout(() => setStep(3), 500);
+  };
+
+  const getServiceLabel = (id: string) => {
+    switch(id) {
+      case 'handyman': return 'Handyman Service';
+      case 'move-in': return 'Move-In Package';
+      case 'renovation': return 'Home Renovation';
+      default: return 'Request';
+    }
+  };
+
+  const getServiceIcon = (id: string, size = 20) => {
+    switch(id) {
+      case 'handyman': return <Wrench size={size} />;
+      case 'move-in': return <Truck size={size} />;
+      case 'renovation': return <Hammer size={size} />;
+      default: return null;
+    }
   };
 
   return (
@@ -78,150 +97,176 @@ const BookingModal: React.FC = () => {
       ></div>
 
       {/* Modal Container */}
-      <div className="relative bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[500px] animate-fade-in-up">
+      <div className="relative bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:row min-h-[550px] animate-fade-in-up md:flex-row">
         
         {/* Close Button */}
         <button 
           onClick={closeBooking}
-          className="absolute top-4 right-4 z-10 p-2 bg-white/10 hover:bg-black/5 rounded-full text-gray-500 hover:text-brand-navy transition-colors"
+          className="absolute top-4 right-4 z-[110] p-2 bg-gray-100 hover:bg-brand-lime hover:text-brand-navy rounded-full text-gray-500 transition-all duration-300 shadow-sm"
         >
           <X size={24} />
         </button>
 
-        {/* Left Panel - Visual & Value Props */}
-        <div className="hidden md:flex md:w-2/5 bg-brand-navy p-8 md:p-10 text-white flex-col justify-between relative overflow-hidden">
-          {/* Decorative Pattern */}
+        {/* Left Panel - Brand Presence */}
+        <div className="hidden md:flex md:w-2/5 bg-brand-navy p-10 text-white flex-col justify-between relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#adf802_1px,transparent_1px)] [background-size:20px_20px]"></div>
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-lime opacity-10 rounded-full blur-3xl"></div>
           
           <div className="relative z-10">
             <h3 className="font-heading text-2xl font-bold mb-2">Handymen<span className="text-brand-lime">.Ng</span></h3>
-            <p className="text-brand-lime/80 text-sm font-medium tracking-wide uppercase">Premium Home Services</p>
+            <p className="text-brand-lime/80 text-xs font-bold tracking-[0.2em] uppercase">Premium Standards</p>
           </div>
 
-          <div className="relative z-10 space-y-6">
-            <h4 className="font-heading text-3xl font-bold leading-tight">
-              Let's get your home <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-lime to-white">sorted out.</span>
+          <div className="relative z-10 space-y-8">
+            <h4 className="font-heading text-4xl font-bold leading-tight">
+              Quality you can <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-lime to-white">depend on.</span>
             </h4>
             
-            <ul className="space-y-4 text-sm text-gray-300">
-              <li className="flex items-center gap-3">
-                <div className="bg-brand-lime/20 p-1 rounded-full"><CheckCircle size={14} className="text-brand-lime" /></div>
-                <span>Verified & Background Checked Pros</span>
+            <ul className="space-y-5 text-sm text-gray-300">
+              <li className="flex items-center gap-4">
+                <div className="bg-brand-lime/20 p-2 rounded-xl"><CheckCircle size={16} className="text-brand-lime" /></div>
+                <span className="font-medium">Verified Professional Network</span>
               </li>
-              <li className="flex items-center gap-3">
-                <div className="bg-brand-lime/20 p-1 rounded-full"><CheckCircle size={14} className="text-brand-lime" /></div>
-                <span>Transparent Quotes, No Hidden Fees</span>
+              <li className="flex items-center gap-4">
+                <div className="bg-brand-lime/20 p-2 rounded-xl"><CheckCircle size={16} className="text-brand-lime" /></div>
+                <span className="font-medium">Upfront Transparent Pricing</span>
               </li>
-              <li className="flex items-center gap-3">
-                <div className="bg-brand-lime/20 p-1 rounded-full"><CheckCircle size={14} className="text-brand-lime" /></div>
-                <span>Full Money-Back Guarantee</span>
+              <li className="flex items-center gap-4">
+                <div className="bg-brand-lime/20 p-2 rounded-xl"><CheckCircle size={16} className="text-brand-lime" /></div>
+                <span className="font-medium">100% Satisfaction Guarantee</span>
               </li>
             </ul>
           </div>
 
           <div className="relative z-10 mt-8 pt-8 border-t border-white/10">
-            <div className="flex items-center gap-1 text-brand-lime mb-1">
-              {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+            <div className="flex items-center gap-1 text-brand-lime mb-2">
+              {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
             </div>
-            <p className="text-xs text-gray-400">"Excellent service. My go-to for everything." - <span className="text-white">Tunde L.</span></p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Trusted by 2000+ Households</p>
           </div>
         </div>
 
-        {/* Right Panel - Interactive Form */}
-        <div className="w-full md:w-3/5 p-6 md:p-10 bg-white relative">
-          {step === 1 ? (
-            <div className="h-full flex flex-col">
-              <div className="mb-8">
-                <h2 className="font-heading text-2xl font-bold text-brand-navy mb-2">How can we help today?</h2>
-                <p className="text-gray-500 text-sm">Select a service and tell us a bit about your needs.</p>
+        {/* Right Panel - Dynamic Content */}
+        <div className="w-full md:w-3/5 p-8 md:p-12 bg-white relative flex flex-col justify-center min-h-[500px]">
+          
+          {/* STEP 1: SERVICE SELECTION */}
+          {step === 1 && (
+            <div className="animate-fade-in space-y-8">
+              <div className="mb-2">
+                <h2 className="font-heading text-3xl font-bold text-brand-navy mb-3">How can we help today?</h2>
+                <p className="text-gray-500 text-base leading-relaxed">Select the service you need to begin your request.</p>
               </div>
 
-              {/* Service Selection */}
-              <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="grid grid-cols-1 gap-4">
                 {[
-                  { id: 'handyman', icon: <Wrench size={20} />, label: 'Handyman' },
-                  { id: 'move-in', icon: <Truck size={20} />, label: 'Move-In' },
-                  { id: 'renovation', icon: <Hammer size={20} />, label: 'Renovate' }
+                  { id: 'handyman', icon: <Wrench size={28} />, label: 'Handyman Service', desc: 'Plumbing, Electrical, Carpentry & AC' },
+                  { id: 'move-in', icon: <Truck size={28} />, label: 'Move-In Packages', desc: 'Full Relocation, Cleaning & Home Setup' },
+                  { id: 'renovation', icon: <Hammer size={28} />, label: 'Renovation & Interior', desc: 'Kitchen, Bathroom & Full Remodeling' }
                 ].map((s) => (
                   <button
                     key={s.id}
-                    type="button"
-                    onClick={() => setSelectedService(s.id)}
-                    className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all duration-200 ${
-                      selectedService === s.id 
-                        ? 'border-brand-lime bg-brand-lime/5 text-brand-navy shadow-sm' 
-                        : 'border-gray-100 bg-gray-50 text-gray-500 hover:border-gray-200 hover:bg-gray-100'
-                    }`}
+                    onClick={() => handleServiceSelect(s.id)}
+                    className="flex items-center gap-6 p-6 rounded-2xl border-2 border-gray-100 bg-gray-50 hover:bg-white hover:border-brand-lime hover:shadow-xl transition-all duration-300 text-left group"
                   >
-                    <div className={`mb-2 ${selectedService === s.id ? 'text-brand-lime' : 'text-gray-400'}`}>{s.icon}</div>
-                    <span className="text-xs font-bold">{s.label}</span>
+                    <div className="bg-white p-4 rounded-xl shadow-sm text-brand-navy group-hover:bg-brand-navy group-hover:text-brand-lime transition-colors duration-300">
+                      {s.icon}
+                    </div>
+                    <div className="flex-grow">
+                      <span className="block font-bold text-lg text-brand-navy group-hover:text-brand-navy">{s.label}</span>
+                      <span className="block text-sm text-gray-400">{s.desc}</span>
+                    </div>
+                    <ArrowRight size={20} className="text-gray-300 group-hover:text-brand-lime transform group-hover:translate-x-1 transition-all" />
                   </button>
                 ))}
               </div>
+              
+              <p className="text-center text-xs text-gray-400 pt-4 font-medium uppercase tracking-[0.1em]">Instant priority callback for all requests</p>
+            </div>
+          )}
 
-              {/* Form Fields */}
-              <form onSubmit={handleSubmit} className="flex-grow flex flex-col gap-4">
+          {/* STEP 2: FORM ENTRY */}
+          {step === 2 && (
+            <div className="animate-fade-in flex flex-col h-full">
+              <div className="mb-8 flex items-center justify-between">
+                <div>
+                  <button 
+                    onClick={() => setStep(1)}
+                    className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-brand-navy mb-2 transition-colors group"
+                  >
+                    <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+                    CHANGE SERVICE
+                  </button>
+                  <h2 className="font-heading text-2xl font-bold text-brand-navy flex items-center gap-3">
+                    {getServiceIcon(selectedService, 24)}
+                    {getServiceLabel(selectedService)}
+                  </h2>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="relative group">
+                  <div className="relative">
                     <input 
                       type="text" 
                       required
-                      placeholder=" "
+                      placeholder="Your Full Name"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="peer w-full p-4 bg-gray-50 border-2 border-transparent rounded-xl outline-none focus:bg-white focus:border-brand-navy/10 transition-all font-medium text-brand-navy"
+                      className="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-brand-lime transition-all font-medium text-brand-navy shadow-sm"
                     />
-                    <label className="absolute left-4 top-4 text-gray-400 text-sm transition-all peer-focus:-top-2 peer-focus:left-2 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-brand-navy peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:left-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 pointer-events-none">Your Name</label>
                   </div>
-                  <div className="relative group">
+                  <div className="relative">
                     <input 
                       type="tel" 
                       required
-                      placeholder=" "
+                      placeholder="Phone Number"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="peer w-full p-4 bg-gray-50 border-2 border-transparent rounded-xl outline-none focus:bg-white focus:border-brand-navy/10 transition-all font-medium text-brand-navy"
+                      className="w-full p-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-brand-lime transition-all font-medium text-brand-navy shadow-sm"
                     />
-                     <label className="absolute left-4 top-4 text-gray-400 text-sm transition-all peer-focus:-top-2 peer-focus:left-2 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-brand-navy peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:left-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 pointer-events-none">Phone Number</label>
                   </div>
                 </div>
                 
-                <div className="relative group flex-grow">
+                <div className="relative">
                   <textarea 
                     required
-                    placeholder=" "
+                    placeholder={`Tell us a bit about your ${selectedService === 'handyman' ? 'issue' : 'requirements'}...`}
                     value={formData.details}
                     onChange={(e) => setFormData({...formData, details: e.target.value})}
-                    className="peer w-full h-full min-h-[100px] p-4 bg-gray-50 border-2 border-transparent rounded-xl outline-none focus:bg-white focus:border-brand-navy/10 transition-all font-medium text-brand-navy resize-none"
+                    className="w-full h-32 p-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-brand-lime transition-all font-medium text-brand-navy resize-none shadow-sm"
                   ></textarea>
-                   <label className="absolute left-4 top-4 text-gray-400 text-sm transition-all peer-focus:-top-2 peer-focus:left-2 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-brand-navy peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:left-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 pointer-events-none">Describe your request...</label>
                 </div>
 
-                <button 
-                  type="submit" 
-                  className="mt-2 w-full bg-brand-navy text-white font-bold py-4 rounded-xl hover:bg-brand-lime hover:text-brand-navy transition-all duration-300 shadow-lg flex items-center justify-center gap-2 group"
-                >
-                  Get Priority Callback
-                  <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
-                </button>
+                <div className="pt-2">
+                  <button 
+                    type="submit" 
+                    className="w-full bg-brand-navy text-white font-bold py-5 rounded-2xl hover:bg-brand-lime hover:text-brand-navy transition-all duration-500 shadow-xl hover:shadow-lime-glow flex items-center justify-center gap-3 group text-lg"
+                  >
+                    Request Priority Callback
+                    <ArrowRight size={22} className="transform group-hover:translate-x-1 transition-transform" />
+                  </button>
+                  <p className="text-center text-[10px] text-gray-400 mt-4 uppercase tracking-widest font-bold">Expect a call within 60-120 minutes</p>
+                </div>
               </form>
             </div>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center animate-fade-in">
-              <div className="w-24 h-24 bg-brand-lime/10 rounded-full flex items-center justify-center mb-6">
-                <CheckCircle size={48} className="text-brand-lime" />
+          )}
+
+          {/* STEP 3: SUCCESS */}
+          {step === 3 && (
+            <div className="h-full flex flex-col items-center justify-center text-center animate-fade-in px-4">
+              <div className="w-28 h-28 bg-brand-lime/10 rounded-full flex items-center justify-center mb-8 border border-brand-lime shadow-lime-glow">
+                <CheckCircle size={56} className="text-brand-navy" />
               </div>
-              <h3 className="font-heading text-3xl font-bold text-brand-navy mb-3">Request Received!</h3>
-              <p className="text-gray-500 max-w-xs mx-auto mb-8 leading-relaxed">
-                Thanks, {formData.name}. We've got your details. One of our experts will call you at <span className="font-bold text-brand-navy">{formData.phone}</span> within 2 hours.
+              <h3 className="font-heading text-4xl font-bold text-brand-navy mb-4">Request Sent!</h3>
+              <p className="text-gray-500 max-w-sm mx-auto mb-10 text-lg leading-relaxed">
+                Thank you, <span className="text-brand-navy font-bold">{formData.name}</span>. An expert has been assigned to your request and will call you at <span className="font-bold text-brand-navy underline">{formData.phone}</span> shortly.
               </p>
               <button 
                 onClick={closeBooking}
-                className="bg-gray-100 text-brand-navy font-bold py-3 px-8 rounded-lg hover:bg-gray-200 transition-colors"
+                className="bg-brand-navy text-white font-bold py-4 px-12 rounded-xl hover:bg-brand-navy/90 transition-all shadow-lg transform hover:-translate-y-0.5"
               >
-                Close Window
+                Return to Site
               </button>
             </div>
           )}
