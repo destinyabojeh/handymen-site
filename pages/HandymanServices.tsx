@@ -49,13 +49,52 @@ const HandymanServices: React.FC = () => {
   return (
     <div className="bg-brand-light min-h-screen">
       {/* Header */}
-      <div className="bg-brand-navy text-white py-24 px-4 text-center relative overflow-hidden">
+      <div className="bg-brand-navy text-white py-20 px-4 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-radial opacity-60"></div>
-        <div className="relative z-10">
+        <div className="relative z-10 flex flex-col items-center max-w-5xl mx-auto">
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6">Professional Handymen, On-Demand</h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light mb-8">
             Whatever the issue, we have a verified expert ready to help. Fair prices, guaranteed work.
           </p>
+
+          <div className="flex flex-col items-center gap-6 w-full mb-8">
+              <Link to="/contact" className="bg-brand-lime text-brand-navy font-bold py-4 px-10 rounded-lg hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(173,248,2,0.4)] inline-block transform hover:-translate-y-1">
+                  Request a Handyman Now
+              </Link>
+
+              <div className="p-4 md:p-6 bg-white/5 backdrop-blur-sm border border-brand-lime/30 rounded-lg shadow-sm text-sm md:text-base max-w-xl mx-auto">
+                  <p className="font-bold text-brand-lime mb-1">Pricing Note:</p>
+                  <p className="text-gray-300 leading-relaxed">Pricing varies by job complexity. Request a quote and we'll provide a transparent breakdown with no hidden fees.</p>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Why Choose Us Section - Bullet Points Version */}
+      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+        <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-8 md:p-12">
+          <div className="text-center mb-10">
+             <h2 className="font-heading text-2xl font-bold text-brand-navy inline-block border-b-4 border-brand-lime pb-2">Why Choose Handymen.Ng?</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+             {[
+               { title: "Verified Professionals", desc: "Every handyman is vetted and background checked." },
+               { title: "Transparent Pricing", desc: "No hidden fees. You get a quote before work starts." },
+               { title: "Quality Guarantee", desc: "Not happy? We fix it at no extra cost." },
+               { title: "Fast Response", desc: "We typically arrive within hours for emergencies." }
+             ].map((item, idx) => (
+               <div key={idx} className="flex items-start group">
+                 <div className="flex-shrink-0 mt-1 bg-brand-light p-2 rounded-full group-hover:bg-brand-lime group-hover:text-brand-navy transition-colors duration-300">
+                    <CheckCircle size={20} className="text-brand-lime group-hover:text-brand-navy transition-colors duration-300" />
+                 </div>
+                 <div className="ml-4">
+                   <h3 className="font-bold text-lg text-brand-navy mb-2">{item.title}</h3>
+                   <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+                 </div>
+               </div>
+             ))}
+          </div>
         </div>
       </div>
 
@@ -72,58 +111,6 @@ const HandymanServices: React.FC = () => {
               <p className="text-gray-600 text-sm leading-relaxed">{service.desc}</p>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Process Section */}
-      <div className="bg-white py-20 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="font-heading text-3xl font-bold text-brand-navy mb-8">Why Choose Handymen.Ng?</h2>
-              <ul className="space-y-6">
-                {[
-                  "Verified Professionals: Every handyman is vetted and background checked.",
-                  "Transparent Pricing: No hidden fees. You get a quote before work starts.",
-                  "Quality Guarantee: Not happy? We fix it at no extra cost.",
-                  "Fast Response: We typically arrive within hours for emergencies."
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start">
-                    <CheckCircle className="text-brand-lime mr-4 mt-1 flex-shrink-0" size={20} />
-                    <span className="text-gray-700 leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              
-              <div className="mt-10 p-8 bg-brand-light border-l-4 border-brand-lime rounded-r-lg shadow-sm">
-                <p className="font-bold text-brand-navy text-lg mb-2">Pricing Note:</p>
-                <p className="text-gray-600 leading-relaxed">Pricing varies by job complexity. Request a quote and we'll provide a transparent breakdown with no hidden fees.</p>
-              </div>
-
-              <div className="mt-10">
-                <Link to="/contact" className="bg-brand-navy text-white font-bold py-4 px-10 rounded-lg hover:bg-brand-lime hover:text-brand-navy transition-all duration-300 shadow-lg inline-block">
-                  Request a Handyman Now
-                </Link>
-              </div>
-            </div>
-            
-            <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-               <div className="absolute inset-0 bg-brand-navy/20 mix-blend-multiply z-10"></div>
-               {/* 
-                  USER INSTRUCTION: 
-                  Save the image you provided as 'handyman-fixing-sink.jpg' in your project's public/ folder. 
-               */}
-               <img 
-                 src="handyman-fixing-sink.jpg" 
-                 onError={(e) => {
-                   // Fallback to previous "person with helmet" image if local file is missing
-                   e.currentTarget.src = "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop";
-                 }}
-                 alt="Professional Handyman fixing a sink" 
-                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
-               />
-            </div>
-          </div>
         </div>
       </div>
     </div>
