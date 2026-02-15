@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-4">
              <div className="text-white flex items-center gap-2 text-sm">
                 <Phone size={16} className="text-brand-lime" />
-                <span className="font-medium">0801 234 5678</span>
+                <span className="font-medium">0811 192 2026</span>
              </div>
              <button 
                onClick={() => openBooking()} 

@@ -174,7 +174,7 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-widest text-gray-400 mb-1 font-semibold">Call Us</p>
-                      <p className="text-2xl font-bold text-white group-hover/item:text-brand-lime transition-colors duration-300 font-heading">0801 234 5678</p>
+                      <p className="text-2xl font-bold text-white group-hover/item:text-brand-lime transition-colors duration-300 font-heading">0811 192 2026</p>
                     </div>
                  </div>
 
@@ -184,7 +184,7 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-widest text-gray-400 mb-1 font-semibold">WhatsApp</p>
-                      <p className="text-2xl font-bold text-white group-hover/item:text-brand-lime transition-colors duration-300 font-heading">0801 234 5678</p>
+                      <p className="text-2xl font-bold text-white group-hover/item:text-brand-lime transition-colors duration-300 font-heading">0810 844 2042</p>
                     </div>
                  </div>
 
