@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Wrench, Truck, Hammer, CheckCircle, ArrowRight, Star, MessageCircle, MapPin, Mail, Loader2 } from 'lucide-react';
+import { X, Wrench, Truck, Hammer, CheckCircle, ArrowRight, Star, MessageCircle, MapPin, Mail, Loader2, Smartphone, Phone } from 'lucide-react';
 import { useBooking } from '../context/BookingContext';
 import { GoogleGenAI, Modality } from "@google/genai";
 
@@ -124,10 +124,7 @@ const BookingModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
     setIsSubmitting(false);
     setIsSuccess(true);
     playSuccessVoice();
@@ -144,42 +141,19 @@ const BookingModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-brand-navy/95 backdrop-blur-sm" onClick={closeBooking}></div>
-
       <div className="relative bg-white w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[550px] animate-fade-in-up border border-white/10">
-        
-        <button 
-          onClick={closeBooking}
-          className="absolute top-6 right-6 z-[110] p-3 bg-gray-50 hover:bg-brand-lime hover:text-brand-navy rounded-full text-gray-400 transition-all shadow-md group"
-        >
+        <button onClick={closeBooking} className="absolute top-6 right-6 z-[110] p-3 bg-gray-50 hover:bg-brand-lime hover:text-brand-navy rounded-full text-gray-400 transition-all shadow-md group">
           <X size={20} className="group-hover:rotate-90 transition-transform duration-300" />
         </button>
 
-        {/* Left Brand Panel */}
         <div className="hidden md:flex md:w-2/5 bg-brand-navy p-12 text-white flex-col justify-between relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#adf802_1px,transparent_1px)] [background-size:20px_20px]"></div>
-          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-lime/10 rounded-full blur-[60px]"></div>
-          
           <div className="relative z-10 flex items-center gap-3">
-            <img 
-              src="logo.jpg" 
-              alt="Logo" 
-              className="h-10 w-auto object-contain" 
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
-            <div>
-              <h3 className="font-heading text-2xl font-bold mb-0">Handymen<span className="text-brand-lime">.Ng</span></h3>
-              <p className="text-brand-lime/80 text-[10px] font-bold tracking-[0.3em] uppercase leading-none">Premium Standards</p>
-            </div>
+            <img src="logo.jpg" alt="Logo" className="h-10 w-auto object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            <h3 className="font-heading text-2xl font-bold mb-0">Handymen<span className="text-brand-lime">.Ng</span></h3>
           </div>
-
           <div className="relative z-10 space-y-8">
-            <h4 className="font-heading text-4xl font-bold leading-tight">
-              Quality you <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-lime to-white">can trust.</span>
-            </h4>
-            
+            <h4 className="font-heading text-4xl font-bold leading-tight">Quality you <br/><span className="text-brand-lime">can trust.</span></h4>
             <ul className="space-y-6 text-sm text-gray-400 font-medium">
               <li className="flex items-center gap-4 group">
                 <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-brand-lime/20 group-hover:border-brand-lime transition-all">
@@ -193,24 +167,11 @@ const BookingModal: React.FC = () => {
                 </div>
                 <span>Fixed Response Times</span>
               </li>
-              <li className="flex items-center gap-4 group">
-                <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-brand-lime/20 group-hover:border-brand-lime transition-all">
-                  <CheckCircle size={16} className="text-brand-lime" />
-                </div>
-                <span>Service Guarantee</span>
-              </li>
             </ul>
           </div>
-
-          <div className="relative z-10">
-            <div className="flex items-center gap-1 text-brand-lime mb-3">
-              {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-            </div>
-            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Nigeria's Premier Service Platform</p>
-          </div>
+          <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Nigeria's Premier Service Platform</p>
         </div>
 
-        {/* Right Form Panel */}
         <div className="w-full md:w-3/5 p-8 md:p-12 bg-white relative flex flex-col justify-center">
           {isSuccess ? (
             <div className="text-center animate-fade-in">
@@ -218,131 +179,81 @@ const BookingModal: React.FC = () => {
                 <CheckCircle size={40} className={`text-brand-navy ${isPlayingAudio ? 'animate-pulse' : ''}`} />
               </div>
               <h3 className="font-heading text-2xl font-bold text-brand-navy mb-2">Request Logged</h3>
-              <p className="text-gray-500 mb-8 text-sm max-w-sm mx-auto">
-                Our concierge team is already reviewing your request.
-              </p>
-              <button 
-                onClick={closeBooking}
-                className="bg-brand-navy text-white font-bold py-4 px-10 rounded-xl hover:bg-brand-lime hover:text-brand-navy transition-all shadow-lg"
-              >
-                Close Window
-              </button>
+              <p className="text-gray-500 mb-8 text-sm max-w-sm mx-auto">Our concierge team is reviewing your request.</p>
+              <button onClick={closeBooking} className="bg-brand-navy text-white font-bold py-4 px-10 rounded-xl hover:bg-brand-lime hover:text-brand-navy transition-all shadow-lg">Close Window</button>
             </div>
           ) : isSubmitting ? (
             <div className="flex flex-col items-center justify-center text-center py-10 animate-fade-in">
-              <div className="relative">
-                <Loader2 size={64} className="text-brand-lime animate-spin" />
-              </div>
+              <Loader2 size={64} className="text-brand-lime animate-spin" />
               <p className="mt-8 font-heading text-lg font-bold text-brand-navy tracking-tight">Processing your request...</p>
-              <p className="text-gray-400 text-sm mt-2">Connecting with our premium artisans</p>
             </div>
           ) : (
-            <>
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="mb-6">
                 <h2 className="font-heading text-2xl font-bold text-brand-navy mb-1 uppercase tracking-tight">{getServiceLabel(formData.service)}</h2>
                 <p className="text-gray-400 text-xs font-medium uppercase tracking-widest">Rapid callback guaranteed.</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="relative group">
-                  <select 
-                    value={formData.service}
-                    onChange={(e) => handleServiceChange(e.target.value)}
-                    className="w-full p-4 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all font-bold text-brand-navy appearance-none text-sm"
-                  >
-                    <option value="handyman">Handyman Service</option>
-                    <option value="move-in">Move-In Package</option>
-                    <option value="renovation">Home Renovation</option>
-                    <option value="emergency">Emergency Repair</option>
-                  </select>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input 
-                      type="text" 
-                      required
-                      placeholder="Full Name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full p-4 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium"
-                    />
-                    <div className="relative group">
-                      <div className="absolute left-0 inset-y-0 w-10 flex items-center justify-center border-r border-gray-200 text-gray-400 group-focus-within:text-brand-lime transition-colors">
-                        <Mail size={16} />
-                      </div>
-                      <input 
-                        type="email" 
-                        placeholder="Email (Optional)"
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="w-full p-4 pl-12 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <input 
-                        type="tel" 
-                        required
-                        placeholder="Phone Number"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full p-4 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium"
-                      />
-                      <label className="flex items-center gap-3 cursor-pointer group bg-brand-light/50 p-3 rounded-xl border border-gray-100 transition-colors hover:bg-brand-light">
-                        <input 
-                          type="checkbox" 
-                          checked={formData.isWhatsApp}
-                          onChange={(e) => setFormData({...formData, isWhatsApp: e.target.checked})}
-                          className="w-5 h-5 rounded border-gray-300 text-brand-navy focus:ring-brand-lime cursor-pointer accent-brand-navy"
-                        />
-                        <div className="flex items-center gap-2">
-                          <MessageCircle size={14} className={formData.isWhatsApp ? 'text-green-500' : 'text-gray-400'} />
-                          <span className="text-[10px] font-bold text-brand-navy uppercase tracking-tight">On WhatsApp?</span>
-                        </div>
-                      </label>
-                    </div>
-
-                    <div className="relative group">
-                      <div className="absolute left-0 inset-y-0 w-10 flex items-center justify-center border-r border-gray-200 text-gray-400 group-focus-within:text-brand-lime transition-colors">
-                        <MapPin size={16} />
-                      </div>
-                      <input 
-                        type="text" 
-                        required
-                        placeholder="Location (e.g. Lekki)"
-                        value={formData.location}
-                        onChange={(e) => setFormData({...formData, location: e.target.value})}
-                        className="w-full p-4 pl-12 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium"
-                      />
-                    </div>
-                  </div>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input 
+                    type="text" required placeholder="Full Name"
+                    value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="w-full p-4 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium"
+                  />
+                  <input 
+                    type="email" placeholder="Email Address"
+                    value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full p-4 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium"
+                  />
                 </div>
                 
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-brand-navy uppercase tracking-widest px-1">{getServiceLabel(formData.service)} Details</label>
-                  <textarea 
-                    required
-                    placeholder="Details of your request..."
-                    value={formData.details}
-                    onChange={(e) => setFormData({...formData, details: e.target.value})}
-                    className="w-full h-24 p-4 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium resize-none"
-                  ></textarea>
+                <div className="flex flex-col sm:flex-row gap-4">
+                   <div className="relative flex-grow">
+                      <div className="absolute left-0 inset-y-0 w-10 flex items-center justify-center border-r border-gray-200 text-gray-400">
+                        <Smartphone size={16} />
+                      </div>
+                      <input 
+                        type="tel" required placeholder="Phone Number"
+                        value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        className="w-full p-4 pl-12 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-bold"
+                      />
+                   </div>
+                   <label className={`flex items-center gap-3 cursor-pointer p-3 rounded-xl border-2 transition-all ${formData.isWhatsApp ? 'bg-brand-lime/10 border-brand-lime' : 'bg-gray-50 border-gray-50'}`}>
+                      <input 
+                        type="checkbox" checked={formData.isWhatsApp}
+                        onChange={(e) => setFormData({...formData, isWhatsApp: e.target.checked})}
+                        className="w-5 h-5 rounded border-gray-300 text-brand-navy focus:ring-brand-lime cursor-pointer accent-brand-navy"
+                      />
+                      <div className="flex items-center gap-2">
+                        {formData.isWhatsApp ? <MessageCircle size={14} className="text-green-600" /> : <Phone size={14} className="text-gray-400" />}
+                        <span className="text-[10px] font-bold text-brand-navy uppercase tracking-tight">{formData.isWhatsApp ? 'WhatsApp' : 'Call'}</span>
+                      </div>
+                   </label>
                 </div>
 
-                <div className="pt-2">
-                  <button 
-                    type="submit" 
-                    className="w-full md:w-auto px-10 py-4 bg-brand-navy text-white font-bold rounded-xl hover:bg-brand-lime hover:text-brand-navy transition-all shadow-lg flex items-center justify-center gap-2 group text-base"
-                  >
-                    Send Request
-                    <ArrowRight size={18} className="transform group-hover:translate-x-1 transition-transform" />
-                  </button>
+                <div className="relative group">
+                  <div className="absolute left-0 inset-y-0 w-10 flex items-center justify-center border-r border-gray-200 text-gray-400">
+                    <MapPin size={16} />
+                  </div>
+                  <input 
+                    type="text" required placeholder="Service Location (e.g. Lekki, Lagos)"
+                    value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})}
+                    className="w-full p-4 pl-12 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium"
+                  />
                 </div>
-              </form>
-            </>
+                
+                <textarea 
+                  required placeholder="Specific details about your request..."
+                  value={formData.details} onChange={(e) => setFormData({...formData, details: e.target.value})}
+                  className="w-full h-24 p-4 bg-gray-50 border-2 border-gray-50 rounded-xl outline-none focus:border-brand-lime transition-all text-sm font-medium resize-none"
+                ></textarea>
+              </div>
+
+              <button type="submit" className="w-full px-10 py-4 bg-brand-navy text-white font-bold rounded-xl hover:bg-brand-lime hover:text-brand-navy transition-all shadow-lg flex items-center justify-center gap-2 group">
+                Send Request <ArrowRight size={18} className="transform group-hover:translate-x-1 transition-transform" />
+              </button>
+            </form>
           )}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Wrench, Zap, Droplet, Paintbrush, Hammer, Fan, Tv, Eraser, CheckCircle, ChevronRight } from 'lucide-react';
 import { useBooking } from '../context/BookingContext';
 
@@ -8,7 +8,8 @@ const HandymanServices: React.FC = () => {
   const { openBooking } = useBooking();
 
   const handleQuickRequest = (label: string) => {
-    openBooking('handyman', `i need your service in ${label}`);
+    // Removed "i need your service in" as requested and replaced with professional phrasing
+    openBooking('handyman', `I require the expertise of a professional for ${label} services within my residence.`);
   };
 
   const quickServices = [

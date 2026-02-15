@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ShieldCheck, Award, TrendingUp, Users, ArrowRight, Star, Youtube, Instagram, Facebook, Mail } from 'lucide-react';
+import { Check, ShieldCheck, Award, TrendingUp, Users, ArrowRight, Star, Youtube, Instagram, Facebook, Mail, Loader2 } from 'lucide-react';
 import { GoogleGenAI, Modality } from "@google/genai";
 
 // Audio Processing Helpers
@@ -75,6 +75,7 @@ const JoinTeam: React.FC = () => {
     area: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   const playSuccessVoice = async () => {
@@ -116,15 +117,18 @@ const JoinTeam: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate delay
+    await new Promise(resolve => setTimeout(resolve, 1800));
+    setIsSubmitting(false);
     setIsSubmitted(true);
     playSuccessVoice();
   };
 
   return (
     <div className="bg-brand-light min-h-screen">
-      {/* Premium Hero Section */}
       <div className="relative bg-brand-navy h-[550px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
@@ -150,20 +154,15 @@ const JoinTeam: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 py-20 -mt-24 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
-          {/* Left Column: Value Propositions */}
           <div className="lg:col-span-5 space-y-8">
             <div className="bg-brand-navy p-10 rounded-3xl text-white shadow-2xl relative overflow-hidden group border border-white/5">
               <div className="absolute top-0 right-0 w-32 h-32 bg-brand-lime/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-              
               <h3 className="font-heading text-2xl font-bold mb-8 flex items-center gap-3">
                 <Star className="text-brand-lime" fill="currentColor" size={24} />
                 The Pro Advantage
               </h3>
-              
               <div className="space-y-10">
                 <div className="flex gap-6 group/item">
                   <div className="flex-shrink-0 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover/item:border-brand-lime/50 transition-colors">
@@ -174,7 +173,6 @@ const JoinTeam: React.FC = () => {
                     <p className="text-gray-400 text-sm leading-relaxed">Access to premium clients in Lagos' most exclusive neighborhoods.</p>
                   </div>
                 </div>
-
                 <div className="flex gap-6 group/item">
                   <div className="flex-shrink-0 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover/item:border-brand-lime/50 transition-colors">
                     <Award className="text-brand-lime" size={28} />
@@ -184,7 +182,6 @@ const JoinTeam: React.FC = () => {
                     <p className="text-gray-400 text-sm leading-relaxed">Get paid immediately upon successful job completion and verification.</p>
                   </div>
                 </div>
-
                 <div className="flex gap-6 group/item">
                   <div className="flex-shrink-0 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover/item:border-brand-lime/50 transition-colors">
                     <Users className="text-brand-lime" size={28} />
@@ -195,35 +192,11 @@ const JoinTeam: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-              <div className="mt-12 pt-8 border-t border-white/10 flex items-center justify-between">
-                <div>
-                  <p className="text-3xl font-bold text-brand-lime">500+</p>
-                  <p className="text-xs text-gray-400 uppercase tracking-widest">Active Partners</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-3xl font-bold text-brand-lime">4.8/5</p>
-                  <p className="text-xs text-gray-400 uppercase tracking-widest">Partner Rating</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial Feature */}
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 italic text-gray-600">
-               <p className="mb-4">"Handymen.Ng changed everything for my business. I focus on my craft, they handle the rest."</p>
-               <div className="flex items-center gap-3 not-italic">
-                  <div className="w-10 h-10 bg-brand-navy rounded-full flex items-center justify-center text-brand-lime font-bold">SO</div>
-                  <div>
-                    <p className="font-bold text-brand-navy text-sm">Samuel O.</p>
-                    <p className="text-xs text-gray-400">Master Electrician, Lekki</p>
-                  </div>
-               </div>
             </div>
           </div>
           
-          {/* Right Column: Application Form */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100 relative overflow-hidden">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100 relative overflow-hidden min-h-[500px] flex flex-col justify-center">
                {isSubmitted ? (
                   <div className="py-20 text-center animate-fade-in">
                     <div className={`w-24 h-24 bg-brand-lime/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-brand-lime shadow-lime-glow transition-all duration-500 ${isPlayingAudio ? 'ring-4 ring-brand-lime/20 scale-110' : 'scale-100'}`}>
@@ -240,13 +213,18 @@ const JoinTeam: React.FC = () => {
                       Update Details <ArrowRight size={16} />
                     </button>
                   </div>
+                ) : isSubmitting ? (
+                  <div className="py-20 flex flex-col items-center justify-center text-center animate-fade-in">
+                    <Loader2 size={64} className="text-brand-lime animate-spin mb-6" />
+                    <h3 className="text-2xl font-heading font-bold text-brand-navy mb-2">Processing Partnership...</h3>
+                    <p className="text-gray-500 text-sm">Reviewing your credentials against our standard</p>
+                  </div>
                 ) : (
                   <>
                     <div className="mb-10">
                       <h3 className="font-heading text-3xl font-bold text-brand-navy mb-2">Join the Elite</h3>
                       <p className="text-gray-500">Please provide accurate details for our verification process.</p>
                     </div>
-
                     <form className="space-y-6" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -254,7 +232,7 @@ const JoinTeam: React.FC = () => {
                           <input type="text" name="fullName" required placeholder="e.g. Samuel Okoro" value={formData.fullName} onChange={handleChange} className="w-full p-4 border-2 border-gray-100 rounded-2xl focus:border-brand-lime outline-none bg-gray-50/50" />
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Email (Optional)</label>
+                          <label className="block text-xs font-bold text-brand-navy uppercase tracking-widest mb-2 ml-1">Email Address</label>
                           <div className="relative group">
                             <div className="absolute left-0 inset-y-0 w-12 flex items-center justify-center border-r border-gray-200 text-gray-400 group-focus-within:text-brand-lime transition-colors">
                               <Mail size={18} />
@@ -303,60 +281,6 @@ const JoinTeam: React.FC = () => {
                 )}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Social Media Section */}
-      <div className="bg-brand-navy py-24 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-lime/5 rounded-full blur-[100px]"></div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">Connect with Our Community</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto mb-16 text-lg">Follow us for pro tips, success stories, and behind-the-scenes content from our premium network.</p>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <Youtube className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
-              <span className="text-white font-bold text-xs uppercase tracking-widest">YouTube</span>
-              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Watch Pro Tips</p>
-            </a>
-            
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <Instagram className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
-              <span className="text-white font-bold text-xs uppercase tracking-widest">Instagram</span>
-              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">See Our Work</p>
-            </a>
-            
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <Facebook className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
-              <span className="text-white font-bold text-xs uppercase tracking-widest">Facebook</span>
-              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Join Discussions</p>
-            </a>
-            
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <TikTokIcon className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
-              <span className="text-white font-bold text-xs uppercase tracking-widest">TikTok</span>
-              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Daily Highlights</p>
-            </a>
-
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <SnapchatIcon className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
-              <span className="text-white font-bold text-xs uppercase tracking-widest">Snapchat</span>
-              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Snap Updates</p>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Trust Banner */}
-      <div className="bg-white py-20 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-           <h4 className="text-gray-400 uppercase tracking-widest text-xs font-bold mb-10">Our Partners Work with Leading Property Managers</h4>
-           <div className="flex flex-wrap justify-center items-center gap-12 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-              <span className="text-2xl font-bold font-heading">ISLAND ESTATES</span>
-              <span className="text-2xl font-bold font-heading">MAINLAND PROPS</span>
-              <span className="text-2xl font-bold font-heading">LEKKI LUXURY</span>
-              <span className="text-2xl font-bold font-heading">ABUJA REALTORS</span>
-           </div>
         </div>
       </div>
     </div>

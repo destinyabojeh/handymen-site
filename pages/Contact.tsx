@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Phone, MapPin, Clock, MessageCircle, Wrench, Truck, Hammer, CheckCircle, ChevronRight, Check, Mail, Loader2 } from 'lucide-react';
+import { Phone, MapPin, Clock, MessageCircle, Wrench, Truck, Hammer, CheckCircle, ChevronRight, Check, Mail, Loader2, Smartphone } from 'lucide-react';
 import { GoogleGenAI, Modality } from "@google/genai";
 
 // Audio Processing Helpers
@@ -51,7 +51,6 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
-  // Auto-populate based on navigation state
   useEffect(() => {
     const state = locationState.state as { service?: string };
     if (state?.service) {
@@ -132,10 +131,7 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
     setIsSubmitting(false);
     setIsSubmitted(true);
     playSuccessVoice();
@@ -201,7 +197,7 @@ const Contact: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start max-w-6xl mx-auto">
-          <div ref={formRef} className="lg:col-span-7 bg-white rounded-[2rem] shadow-xl p-8 md:p-10 border border-gray-100 relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+          <div ref={formRef} className="lg:col-span-12 bg-white rounded-[2rem] shadow-xl p-8 md:p-12 border border-gray-100 relative overflow-hidden min-h-[400px] flex flex-col justify-center">
             {isSubmitted ? (
               <div className="py-12 flex flex-col items-center justify-center text-center animate-fade-in">
                 <div className={`w-24 h-24 bg-brand-lime/10 text-brand-navy rounded-full flex items-center justify-center mb-6 border border-brand-lime transition-all duration-500 ${isPlayingAudio ? 'scale-110 shadow-lime-glow ring-4 ring-brand-lime/20' : 'scale-100'}`}>
@@ -217,146 +213,118 @@ const Contact: React.FC = () => {
                 <p className="text-gray-500 text-sm">Please wait while we log your service details.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="name" className="block text-[10px] font-bold text-brand-navy mb-2 uppercase tracking-widest">Full Name</label>
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="block text-[10px] font-bold text-brand-navy uppercase tracking-widest ml-1">Full Name</label>
                     <input 
-                      type="text" 
-                      id="name" 
-                      name="name" 
-                      required
-                      className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm"
+                      type="text" id="name" name="name" required
+                      className="w-full px-5 py-4 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm font-medium"
                       placeholder="e.g. Samuel Okoro"
-                      value={formData.name}
-                      onChange={handleChange}
+                      value={formData.name} onChange={handleChange}
                     />
                   </div>
-                  <div>
-                    <label htmlFor="email" className="block text-[10px] font-bold text-brand-navy mb-2 uppercase tracking-widest">Email Address (Optional)</label>
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="block text-[10px] font-bold text-brand-navy uppercase tracking-widest ml-1">Email Address</label>
                     <div className="relative group">
                       <div className="absolute left-0 inset-y-0 w-12 flex items-center justify-center border-r border-gray-200 text-gray-400 group-focus-within:text-brand-lime transition-colors">
                         <Mail size={18} />
                       </div>
                       <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        className="w-full px-5 py-3.5 pl-14 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm"
+                        type="email" id="email" name="email"
+                        className="w-full px-5 py-4 pl-14 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm font-medium"
                         placeholder="e.g. hello@example.com"
-                        value={formData.email}
-                        onChange={handleChange}
+                        value={formData.email} onChange={handleChange}
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="phone" className="block text-[10px] font-bold text-brand-navy mb-2 uppercase tracking-widest">Phone Number</label>
-                    <div className="relative group space-y-3">
-                      <input 
-                        type="tel" 
-                        id="phone" 
-                        name="phone" 
-                        required
-                        className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm"
-                        placeholder="0811 000 0000"
-                        value={formData.phone}
-                        onChange={handleChange}
-                      />
-                      <label className="flex items-center gap-3 cursor-pointer group bg-brand-light p-3 rounded-xl border border-gray-100 transition-colors hover:bg-brand-light">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="block text-[10px] font-bold text-brand-navy uppercase tracking-widest ml-1">Contact Phone</label>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="relative flex-grow">
+                        <div className="absolute left-0 inset-y-0 w-12 flex items-center justify-center border-r border-gray-200 text-gray-400">
+                          <Smartphone size={18} />
+                        </div>
                         <input 
-                          type="checkbox" 
-                          name="isWhatsApp"
-                          checked={formData.isWhatsApp}
-                          onChange={handleChange}
+                          type="tel" id="phone" name="phone" required
+                          className="w-full px-5 py-4 pl-14 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm font-bold"
+                          placeholder="0811 000 0000"
+                          value={formData.phone} onChange={handleChange}
+                        />
+                      </div>
+                      <label className={`flex items-center gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all min-w-[160px] ${formData.isWhatsApp ? 'bg-brand-lime/10 border-brand-lime' : 'bg-gray-50 border-gray-50'}`}>
+                        <input 
+                          type="checkbox" name="isWhatsApp"
+                          checked={formData.isWhatsApp} onChange={handleChange}
                           className="w-5 h-5 rounded border-gray-300 text-brand-navy focus:ring-brand-lime cursor-pointer accent-brand-navy"
                         />
                         <div className="flex items-center gap-2">
-                          <MessageCircle size={14} className={formData.isWhatsApp ? 'text-green-500' : 'text-gray-400'} />
-                          <span className="text-[10px] font-bold text-brand-navy uppercase tracking-tight">On WhatsApp?</span>
+                          {formData.isWhatsApp ? <MessageCircle size={16} className="text-green-600" /> : <Phone size={16} className="text-gray-400" />}
+                          <span className="text-[10px] font-bold text-brand-navy uppercase tracking-tight">{formData.isWhatsApp ? 'WhatsApp' : 'Reg. Call'}</span>
                         </div>
                       </label>
                     </div>
                   </div>
-                  <div className="space-y-4">
-                    <div>
-                      <label htmlFor="location" className="block text-[10px] font-bold text-brand-navy mb-2 uppercase tracking-widest">Service Location</label>
-                      <div className="relative group">
-                        <div className="absolute left-0 inset-y-0 w-12 flex items-center justify-center border-r border-gray-200 text-gray-400 group-focus-within:text-brand-lime transition-colors">
-                          <MapPin size={18} />
-                        </div>
-                        <input 
-                          type="text" 
-                          id="location" 
-                          name="location" 
-                          required
-                          className="w-full px-5 py-3.5 pl-14 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm font-medium"
-                          placeholder="e.g. Victoria Island, Lagos"
-                          value={formData.location}
-                          onChange={handleChange}
-                        />
+                  <div className="space-y-2">
+                    <label htmlFor="location" className="block text-[10px] font-bold text-brand-navy uppercase tracking-widest ml-1">Service Location</label>
+                    <div className="relative group">
+                      <div className="absolute left-0 inset-y-0 w-12 flex items-center justify-center border-r border-gray-200 text-gray-400 group-focus-within:text-brand-lime transition-colors">
+                        <MapPin size={18} />
                       </div>
+                      <input 
+                        type="text" id="location" name="location" required
+                        className="w-full px-5 py-4 pl-14 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm font-medium"
+                        placeholder="e.g. Victoria Island, Lagos"
+                        value={formData.location} onChange={handleChange}
+                      />
                     </div>
                   </div>
                 </div>
 
-                <div>
-                   <label htmlFor="description" className="block text-[10px] font-bold text-brand-navy mb-2 uppercase tracking-widest">{formData.serviceType}</label>
+                <div className="space-y-2">
+                   <label htmlFor="description" className="block text-[10px] font-bold text-brand-navy uppercase tracking-widest ml-1">{formData.serviceType} Details</label>
                    <textarea
-                     id="description"
-                     name="description"
-                     rows={3}
-                     className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm resize-none"
-                     placeholder="Tell us what needs fixing..."
-                     value={formData.description}
-                     onChange={handleChange}
+                     id="description" name="description" rows={4}
+                     className="w-full px-5 py-4 rounded-xl border-2 border-gray-50 focus:border-brand-lime outline-none transition-all bg-gray-50 focus:bg-white text-sm font-medium resize-none"
+                     placeholder="Please provide specific details for your request..."
+                     value={formData.description} onChange={handleChange}
                    ></textarea>
                 </div>
 
-                <div className="flex justify-center md:justify-start">
-                  <button type="submit" className="px-8 py-3.5 bg-brand-navy text-white font-bold rounded-xl hover:bg-brand-lime hover:text-brand-navy transition-all duration-500 shadow-xl flex items-center justify-center gap-2 group text-sm transform hover:-translate-y-1">
-                    Send Request
-                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <div className="flex justify-center md:justify-end pt-4">
+                  <button type="submit" className="w-full md:w-auto px-12 py-5 bg-brand-navy text-white font-bold rounded-xl hover:bg-brand-lime hover:text-brand-navy transition-all duration-500 shadow-xl flex items-center justify-center gap-3 group text-lg transform hover:-translate-y-1">
+                    Submit Professional Request
+                    <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </form>
             )}
           </div>
+        </div>
 
-          <div className="lg:col-span-5 space-y-6">
-             <div className="bg-brand-navy p-8 rounded-[2rem] shadow-xl text-white relative overflow-hidden group border border-white/5">
-               <div className="absolute -top-10 -right-10 w-40 h-40 bg-brand-lime/10 rounded-full blur-3xl group-hover:bg-brand-lime/20 transition-all duration-700"></div>
-               
-               <h3 className="font-heading text-xl font-bold mb-8 flex items-center gap-3">
-                 Connect faster
-                 <div className="flex-grow h-px bg-white/10"></div>
-               </h3>
-               
-               <div className="space-y-8">
-                 <div className="flex items-center group/item cursor-pointer">
-                    <div className="w-12 h-12 bg-white/5 backdrop-blur-md rounded-xl flex items-center justify-center mr-4 border border-white/5 group-hover/item:bg-brand-lime transition-all duration-500">
-                      <Phone className="text-brand-lime group-hover/item:text-brand-navy" size={20} />
-                    </div>
-                    <div>
-                      <p className="text-[9px] uppercase tracking-widest text-gray-500 mb-0.5 font-bold">Call Line</p>
-                      <p className="text-lg font-bold text-white group-hover/item:text-brand-lime transition-colors">0811 192 2026</p>
-                    </div>
-                 </div>
-
-                 <div className="flex items-center group/item cursor-pointer">
-                    <div className="w-12 h-12 bg-white/5 backdrop-blur-md rounded-xl flex items-center justify-center mr-4 border border-white/5 group-hover/item:bg-brand-lime transition-all duration-500">
-                      <MessageCircle className="text-brand-lime group-hover/item:text-brand-navy" size={20} />
-                    </div>
-                    <div>
-                      <p className="text-[9px] uppercase tracking-widest text-gray-500 mb-0.5 font-bold">WhatsApp Business</p>
-                      <p className="text-lg font-bold text-white group-hover/item:text-brand-lime transition-colors">0810 844 2042</p>
-                    </div>
-                 </div>
-               </div>
-             </div>
-          </div>
+        {/* Quick Connection Strip */}
+        <div className="max-w-6xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-brand-navy p-8 rounded-3xl flex items-center gap-6 group cursor-pointer border border-white/5 hover:border-brand-lime/30 transition-all">
+                <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center group-hover:bg-brand-lime transition-all">
+                  <Phone className="text-brand-lime group-hover:text-brand-navy" size={24} />
+                </div>
+                <div>
+                   <p className="text-[9px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-1">Emergency Service</p>
+                   <p className="text-xl font-bold text-white group-hover:text-brand-lime transition-colors">0811 192 2026</p>
+                </div>
+            </div>
+            <div className="bg-brand-navy p-8 rounded-3xl flex items-center gap-6 group cursor-pointer border border-white/5 hover:border-brand-lime/30 transition-all">
+                <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center group-hover:bg-brand-lime transition-all">
+                  <MessageCircle className="text-brand-lime group-hover:text-brand-navy" size={24} />
+                </div>
+                <div>
+                   <p className="text-[9px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-1">WhatsApp Concierge</p>
+                   <p className="text-xl font-bold text-white group-hover:text-brand-lime transition-colors">0810 844 2042</p>
+                </div>
+            </div>
         </div>
       </div>
     </div>
