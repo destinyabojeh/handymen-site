@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Wrench, Truck, ShieldCheck, Star, ArrowRight, Hammer, CheckCircle } from 'lucide-react';
+import { useBooking } from '../context/BookingContext';
 
 const RotatingHeroText: React.FC = () => {
   const messages = [
@@ -34,6 +35,8 @@ const RotatingHeroText: React.FC = () => {
 };
 
 const Home: React.FC = () => {
+  const { openBooking } = useBooking();
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -88,9 +91,12 @@ const Home: React.FC = () => {
           <RotatingHeroText />
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
-            <Link to="/contact" className="px-8 py-4 bg-brand-lime text-brand-navy font-bold rounded-lg hover:bg-gradient-to-r hover:from-brand-lime hover:to-brand-limeHover transition-all duration-300 shadow-[0_0_20px_rgba(173,248,2,0.3)] hover:shadow-[0_0_30px_rgba(173,248,2,0.5)] transform hover:-translate-y-1 text-center min-w-[200px]">
+            <button 
+              onClick={() => openBooking('handyman')}
+              className="px-8 py-4 bg-brand-lime text-brand-navy font-bold rounded-lg hover:bg-gradient-to-r hover:from-brand-lime hover:to-brand-limeHover transition-all duration-300 shadow-[0_0_20px_rgba(173,248,2,0.3)] hover:shadow-[0_0_30px_rgba(173,248,2,0.5)] transform hover:-translate-y-1 text-center min-w-[200px]"
+            >
               Book a Handyman
-            </Link>
+            </button>
             <Link to="/move-in" className="px-8 py-4 border border-brand-lime/30 text-white font-bold rounded-lg hover:border-brand-lime hover:text-brand-lime transition-all duration-300 transform hover:-translate-y-1 text-center flex items-center justify-center gap-2 min-w-[200px] bg-brand-navy/40 backdrop-blur-md hover:bg-brand-navy/60">
               <span className="flex items-center gap-2">
                 Explore Move-In <ArrowRight size={20} />
@@ -276,9 +282,12 @@ const Home: React.FC = () => {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-white mb-6">Ready for a Home That Just Works?</h2>
           <p className="text-gray-300 mb-10 text-lg font-light">Don't let home maintenance stress you out. Get professional help today.</p>
-          <Link to="/contact" className="inline-block bg-brand-lime text-brand-navy font-bold text-lg py-4 px-12 rounded-lg hover:bg-brand-limeHover transition-all duration-300 transform hover:-translate-y-1 shadow-[0_0_20px_rgba(173,248,2,0.4)]">
+          <button 
+            onClick={() => openBooking()}
+            className="inline-block bg-brand-lime text-brand-navy font-bold text-lg py-4 px-12 rounded-lg hover:bg-brand-limeHover transition-all duration-300 transform hover:-translate-y-1 shadow-[0_0_20px_rgba(173,248,2,0.4)]"
+          >
             Get Your Free Quote
-          </Link>
+          </button>
         </div>
       </div>
     </div>

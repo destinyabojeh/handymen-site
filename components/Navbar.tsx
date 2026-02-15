@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone } from 'lucide-react';
+import { useBooking } from '../context/BookingContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { openBooking } = useBooking();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -41,9 +43,12 @@ const Navbar: React.FC = () => {
                 <Phone size={16} className="text-brand-lime" />
                 <span className="font-medium">0801 234 5678</span>
              </div>
-             <Link to="/contact" className="bg-brand-lime text-brand-navy font-bold py-2 px-6 rounded-md transition-all duration-300 shadow-md hover:shadow-lime-glow hover:bg-brand-limeHover transform hover:-translate-y-0.5">
+             <button 
+               onClick={() => openBooking()} 
+               className="bg-brand-lime text-brand-navy font-bold py-2 px-6 rounded-md transition-all duration-300 shadow-md hover:shadow-lime-glow hover:bg-brand-limeHover transform hover:-translate-y-0.5"
+             >
                Get Quote
-             </Link>
+             </button>
           </div>
           <div className="-mr-2 flex md:hidden">
             <button
@@ -66,9 +71,15 @@ const Navbar: React.FC = () => {
             <Link to="/renovation" className={mobileLinkClass} onClick={toggleMenu}>Renovations</Link>
             <Link to="/join" className={mobileLinkClass} onClick={toggleMenu}>Join as Pro</Link>
             <Link to="/contact" className={mobileLinkClass} onClick={toggleMenu}>Contact Us</Link>
-            <Link to="/contact" className="block w-full text-center mt-4 bg-brand-lime text-brand-navy font-bold py-3 rounded-md hover:bg-brand-limeHover transition-colors duration-300" onClick={toggleMenu}>
+            <button 
+              className="block w-full text-center mt-4 bg-brand-lime text-brand-navy font-bold py-3 rounded-md hover:bg-brand-limeHover transition-colors duration-300" 
+              onClick={() => {
+                toggleMenu();
+                openBooking();
+              }}
+            >
               Get Free Quote
-            </Link>
+            </button>
           </div>
         </div>
       )}

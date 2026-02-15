@@ -109,9 +109,17 @@ const HandymanServices: React.FC = () => {
             
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
                <div className="absolute inset-0 bg-brand-navy/20 mix-blend-multiply z-10"></div>
+               {/* 
+                  USER INSTRUCTION: 
+                  Save the image you provided as 'handyman-fixing-sink.jpg' in your project's public/ folder. 
+               */}
                <img 
-                 src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop" 
-                 alt="Electrician working" 
+                 src="/handyman-fixing-sink.jpg" 
+                 onError={(e) => {
+                   // Fallback to previous "person with helmet" image if local file is missing
+                   e.currentTarget.src = "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop";
+                 }}
+                 alt="Professional Handyman fixing a sink" 
                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                />
             </div>

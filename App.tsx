@@ -8,6 +8,8 @@ import MoveInServices from './pages/MoveInServices';
 import RenovationServices from './pages/RenovationServices';
 import Contact from './pages/Contact';
 import JoinTeam from './pages/JoinTeam';
+import { BookingProvider } from './context/BookingContext';
+import BookingModal from './components/BookingModal';
 
 // Scroll to top on route change wrapper
 const ScrollToTop = () => {
@@ -20,23 +22,26 @@ const ScrollToTop = () => {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="flex flex-col min-h-screen bg-brand-light font-body text-gray-800">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/handyman" element={<HandymanServices />} />
-            <Route path="/move-in" element={<MoveInServices />} />
-            <Route path="/renovation" element={<RenovationServices />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/join" element={<JoinTeam />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <BookingProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="flex flex-col min-h-screen bg-brand-light font-body text-gray-800">
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/handyman" element={<HandymanServices />} />
+              <Route path="/move-in" element={<MoveInServices />} />
+              <Route path="/renovation" element={<RenovationServices />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/join" element={<JoinTeam />} />
+            </Routes>
+          </main>
+          <Footer />
+          <BookingModal />
+        </div>
+      </Router>
+    </BookingProvider>
   );
 }
 
