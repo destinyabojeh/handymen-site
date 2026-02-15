@@ -17,6 +17,22 @@ const TikTokIcon = ({ size = 24, className = "" }) => (
   </svg>
 );
 
+const SnapchatIcon = ({ size = 24, className = "" }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M12 3c-1.2 0-2.4.6-3.1 1.6C7.5 5.8 7.3 7 7.3 8.2c0 .6.1 1.2.2 1.8-1.5.4-2.5 1.4-2.5 2.5 0 .8.5 1.5 1.4 2 .1.1.2.1.2.2 0 .2-.4.6-.4 1.1 0 .6.5.9 1 .9.3 0 .5-.1.8-.3 1 1 2.3 1.6 4 1.6s3-.6 4-1.6c.3.2.5.3.8.3.5 0 1-.3 1-.9 0-.5-.4-.9-.4-1.1 0-.1.1-.1.2-.2.9-.5 1.4-1.2 1.4-2 0-1.1-1-2.1-2.5-2.5.1-.6.2-1.2.2-1.8 0-1.2-.2-2.4-1.6-3.6C14.4 3.6 13.2 3 12 3z" />
+  </svg>
+);
+
 const JoinTeam: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -247,29 +263,35 @@ const JoinTeam: React.FC = () => {
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">Connect with Our Community</h2>
           <p className="text-gray-400 max-w-2xl mx-auto mb-16 text-lg">Follow us for pro tips, success stories, and behind-the-scenes content from our premium network.</p>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <Youtube className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
-              <span className="text-white font-bold text-sm uppercase tracking-widest">YouTube</span>
-              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Watch Pro Tips</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <Youtube className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
+              <span className="text-white font-bold text-xs uppercase tracking-widest">YouTube</span>
+              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Watch Pro Tips</p>
             </a>
             
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <Instagram className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
-              <span className="text-white font-bold text-sm uppercase tracking-widest">Instagram</span>
-              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">See Our Work</p>
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <Instagram className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
+              <span className="text-white font-bold text-xs uppercase tracking-widest">Instagram</span>
+              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">See Our Work</p>
             </a>
             
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <Facebook className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
-              <span className="text-white font-bold text-sm uppercase tracking-widest">Facebook</span>
-              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Join Discussions</p>
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <Facebook className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
+              <span className="text-white font-bold text-xs uppercase tracking-widest">Facebook</span>
+              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Join Discussions</p>
             </a>
             
-            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
-              <TikTokIcon className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={48} />
-              <span className="text-white font-bold text-sm uppercase tracking-widest">TikTok</span>
-              <p className="text-gray-500 text-xs mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Daily Highlights</p>
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <TikTokIcon className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
+              <span className="text-white font-bold text-xs uppercase tracking-widest">TikTok</span>
+              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Daily Highlights</p>
+            </a>
+
+            <a href="#" className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-3xl flex flex-col items-center group hover:bg-brand-lime/10 hover:border-brand-lime/50 transition-all duration-500">
+              <SnapchatIcon className="text-white group-hover:text-brand-lime mb-4 transition-colors" size={40} />
+              <span className="text-white font-bold text-xs uppercase tracking-widest">Snapchat</span>
+              <p className="text-gray-500 text-[10px] mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Snap Updates</p>
             </a>
           </div>
         </div>

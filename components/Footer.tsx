@@ -18,6 +18,22 @@ const TikTokIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
+const SnapchatIcon = ({ size = 20, className = "" }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M12 3c-1.2 0-2.4.6-3.1 1.6C7.5 5.8 7.3 7 7.3 8.2c0 .6.1 1.2.2 1.8-1.5.4-2.5 1.4-2.5 2.5 0 .8.5 1.5 1.4 2 .1.1.2.1.2.2 0 .2-.4.6-.4 1.1 0 .6.5.9 1 .9.3 0 .5-.1.8-.3 1 1 2.3 1.6 4 1.6s3-.6 4-1.6c.3.2.5.3.8.3.5 0 1-.3 1-.9 0-.5-.4-.9-.4-1.1 0-.1.1-.1.2-.2.9-.5 1.4-1.2 1.4-2 0-1.1-1-2.1-2.5-2.5.1-.6.2-1.2.2-1.8 0-1.2-.2-2.4-1.6-3.6C14.4 3.6 13.2 3 12 3z" />
+  </svg>
+);
+
 const Footer: React.FC = () => {
   return (
     <footer className="bg-brand-navy text-white pt-16 pb-8 border-t border-brand-lime/20">
@@ -29,11 +45,12 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               Your trusted partner for home maintenance, renovation, and premium relocation services in Nigeria. We bring professionalism to your doorstep.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 flex-wrap gap-y-3">
               <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="Facebook"><Facebook size={20} /></a>
               <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="Instagram"><Instagram size={20} /></a>
               <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="YouTube"><Youtube size={20} /></a>
               <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="TikTok"><TikTokIcon size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-brand-lime transition-all duration-300" aria-label="Snapchat"><SnapchatIcon size={20} /></a>
             </div>
           </div>
 
